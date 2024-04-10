@@ -13,7 +13,7 @@ class FunPage extends StatefulWidget {
 class _FunPageState extends State<FunPage> {
   final List _pages = [ServicePage(), UpdatesPage(), ProfilePage()];
   int _selectedIndex = 0;
-  void _navigateBottomBar(int index){
+  void _navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
