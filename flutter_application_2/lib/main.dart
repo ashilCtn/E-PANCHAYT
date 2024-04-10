@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/auth_page.dart';
 import 'package:flutter_application_2/app_pages/functionality_page.dart';
+import 'package:flutter_application_2/app_pages/home_page.dart';
 import 'package:flutter_application_2/app_pages/login_page.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:flutter_application_2/components/my_container.dart';
@@ -25,8 +27,10 @@ class MyApp extends StatelessWidget {
         'x': (context) => RegistrationPage(),
         'y': (context) => LoginPage(),
         'z': (context) => FunPage(),
+        'auth': (context) => AuthPage(),
+        'home': (context) => HomePage(),
       },
-      home: LoginPage(),
+      home: AuthPage(),
     );
   }
 }

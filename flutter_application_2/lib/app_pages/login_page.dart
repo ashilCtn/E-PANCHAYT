@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:flutter_application_2/components/my_button.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
@@ -9,7 +9,12 @@ import 'functionality_page.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController userName = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final TextEditingController passWord = TextEditingController();
+
+  void signUserIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: userName.text, password: passWord.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class LoginPage extends StatelessWidget {
                   height: 10,
                 ),
                 MyTextField(
-                  controller: password,
+                  controller: passWord,
                   hintText: "Password",
                   obscureText: true,
                 ),
@@ -62,7 +67,8 @@ class LoginPage extends StatelessWidget {
                 //MyButton(onTap: signUserIn),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, 'z');
+                      //Navigator.pushNamed(context, 'z');
+                      signUserIn();
                     },
                     child: Text(
                       "Login",
