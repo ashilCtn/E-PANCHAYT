@@ -1,19 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:flutter_application_2/components/my_button.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
+import 'package:flutter_application_2/components/square_tile_new.dart';
 import 'functionality_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController userName = TextEditingController();
-  final TextEditingController passWord = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  void googleSignIn() {
+    print("x");
+  }
+  void forgotPass(){}
 
+  void faceBookSingIn() {}
+  
   void signUserIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: userName.text, password: passWord.text);
+        email: userName.text, password: password.text);
   }
 
   @override
@@ -45,7 +54,7 @@ class LoginPage extends StatelessWidget {
                   height: 10,
                 ),
                 MyTextField(
-                  controller: passWord,
+                  controller: password,
                   hintText: "Password",
                   obscureText: true,
                 ),
@@ -57,7 +66,13 @@ class LoginPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Forgot Password?"),
+                      TextButton(
+                        onPressed: () => forgotPass,
+                        child: Text(
+                          "Forgot password",
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -68,7 +83,7 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       //Navigator.pushNamed(context, 'z');
-                      signUserIn();
+			signUserIn();
                     },
                     child: Text(
                       "Login",
@@ -82,9 +97,40 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: Colors.black,
                     )),
 
-                SizedBox(
-                  height: 25,
+                SizedBox(height: 25),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    Text("Or continue with"),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SquareTile1(
+                      onTap: () => googleSignIn,
+                      imagePath: 'lib/img/google.png',
+                      ),
+                    SizedBox(width: 20),
+                    SquareTile1(
+                      onTap: () => faceBookSingIn,
+                      imagePath: "lib/img/facebook.png",
+                      ),
+                  ],
+                ),
+                SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -108,6 +154,8 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
-        )));
+        )
+      )
+    );
   }
 }
