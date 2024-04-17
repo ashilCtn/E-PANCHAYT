@@ -1,25 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_2/app_pages/regist_page.dart';
-import 'package:flutter_application_2/components/my_button.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
 import 'package:flutter_application_2/components/square_tile_new.dart';
-import 'functionality_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
+
   void googleSignIn() {
     print("x");
   }
-  void forgotPass(){}
+
+  void forgotPass() {}
 
   void faceBookSingIn() {}
-  
+
   void signUserIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: userName.text, password: password.text);
@@ -47,7 +45,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 MyTextField(
                   controller: userName,
-                  hintText: "Username",
+                  hintText: "Email",
                   obscureText: false,
                 ),
                 SizedBox(
@@ -83,7 +81,7 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       //Navigator.pushNamed(context, 'z');
-			signUserIn();
+                      signUserIn();
                     },
                     child: Text(
                       "Login",
@@ -122,12 +120,12 @@ class LoginPage extends StatelessWidget {
                     SquareTile1(
                       onTap: () => googleSignIn,
                       imagePath: 'lib/img/google.png',
-                      ),
+                    ),
                     SizedBox(width: 20),
                     SquareTile1(
                       onTap: () => faceBookSingIn,
                       imagePath: "lib/img/facebook.png",
-                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 50),
@@ -141,7 +139,7 @@ class LoginPage extends StatelessWidget {
                         Navigator.pushNamed(context, 'x');
                       },
                       child: Text(
-                        "Register",
+                        "Register Now",
                         style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black,
@@ -154,8 +152,6 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
-        )
-      )
-    );
+        )));
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_application_2/app_pages/functionality_page.dart';
 import 'package:flutter_application_2/app_pages/home_page.dart';
 import 'package:flutter_application_2/app_pages/login_page.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
-import 'package:flutter_application_2/components/my_container.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 

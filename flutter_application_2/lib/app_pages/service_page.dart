@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/my_textfield.dart';
 
 class ServicePage extends StatelessWidget {
   ServicePage({super.key});
@@ -15,12 +14,10 @@ class ServicePage extends StatelessWidget {
           children: [
             TextField(
               controller: search,
-              
             )
           ],
         ),
-      )
-    ),
+      )),
     );
   }
 }
