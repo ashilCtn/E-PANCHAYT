@@ -1,15 +1,52 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
-  final TextEditingController userName_1 = TextEditingController();
-  final TextEditingController emailId = TextEditingController();
-  final TextEditingController wardNo = TextEditingController();
-  final TextEditingController mobNo = TextEditingController();
-  final TextEditingController password_1 = TextEditingController();
-  final TextEditingController confirmPass = TextEditingController();
+  final TextEditingController _userName_1 = TextEditingController();
+  final TextEditingController _emailId = TextEditingController();
+  final TextEditingController _wardNo = TextEditingController();
+  final TextEditingController _mobNo = TextEditingController();
+  final TextEditingController _password_1 = TextEditingController();
+  final TextEditingController _confirmPass = TextEditingController();
+
+  bool passwordConfirmed() {
+    if (_password_1.text.trim() == _confirmPass.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
+    //tip!! >> add a pop up for showing the pass and confirm pass donot match
+  }
+
+  Future registerFunc() async {
+    //just create a new user and password
+    if (passwordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailId.text.trim(), password: _password_1.text.trim());
+    }
+    //add user details
+    addNormalUserDetails(
+        _userName_1.text.trim(),
+        _emailId.text.trim(),
+        int.parse(_wardNo.text.trim()),
+        int.parse(_mobNo.text.trim()),
+        _password_1.text.trim());
+  }
+
+  //function of firestore collection method in flutter to upload data to DB
+  Future addNormalUserDetails(String userName, String email, int wardno,
+      int mobileno, String password) async {
+    await FirebaseFirestore.instance.collection('NormalUsers').add({
+      'Username': userName,
+      'Email': email,
+      'Wardno': wardno,
+      'Mobileno': mobileno,
+      'Password': password,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,37 +72,39 @@ class RegistrationPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: userName_1,
+                    controller: _userName_1,
                     hintText: "Username",
                     obscureText: false),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: emailId, hintText: "Email", obscureText: false),
+                    controller: _emailId,
+                    hintText: "Email",
+                    obscureText: false),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: wardNo,
+                    controller: _wardNo,
                     hintText: "Ward no",
                     obscureText: false),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: mobNo,
+                    controller: _mobNo,
                     hintText: "Mobile no",
                     obscureText: false),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: password_1,
+                    controller: _password_1,
                     hintText: "Password",
                     obscureText: true),
                 SizedBox(height: 10),
                 MyTextField(
-                    controller: confirmPass,
+                    controller: _confirmPass,
                     hintText: "Confirm Password",
                     obscureText: true),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     //Navigator.pushNamed(context, 'z');
-                    //RegisterFunc();
+                    registerFunc();
                   },
                   child: Text(
                     "Register",

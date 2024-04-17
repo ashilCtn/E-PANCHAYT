@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
 import 'package:flutter_application_2/components/square_tile_new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
