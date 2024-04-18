@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/forgot_password.dart';
 import 'package:flutter_application_2/components/my_textfield.dart';
 import 'package:flutter_application_2/components/square_tile_new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,7 +64,12 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () => forgotPass,
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ForgotPasswordPage();
+                          }));
+                        },
                         child: Text(
                           "Forgot password",
                           style: TextStyle(color: Colors.grey[700]),
