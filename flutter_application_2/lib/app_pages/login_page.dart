@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                           }));
                         },
                         child: Text(
-                          "Forgot password",
+                          "Forgot password?",
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                       ),
