@@ -1,25 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/forgot_password.dart';
-import 'package:flutter_application_2/components/my_textfield.dart';
-import 'package:flutter_application_2/components/square_tile_new.dart';
+import 'package:flutter_application_2/components/obscure_textformfield.dart';
+import 'package:flutter_application_2/components/my_textform_field.dart';
+import 'package:flutter_application_2/components/my_button_new.dart';
+import 'package:flutter_application_2/components/square_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-  final TextEditingController userName = TextEditingController();
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController email = TextEditingController();
+
   final TextEditingController password = TextEditingController();
 
-  void googleSignIn() {
-    print("x");
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  //bool obscureText = true;
+
+  void _submitForm() async {
+    if (formKey.currentState!.validate()) {
+      // Navigator.pushNamed(context, 'z');
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email.text, password: password.text);
+    }
   }
 
-  void forgotPass() {}
+  String? _validateEmail(value) {
+    if (value!.isEmpty) {
+      return "Please enter your email";
+    }
+    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,4}$');
+    if (!emailRegExp.hasMatch(value)) {
+      return 'Please enter a Valid email';
+    }
+    return null;
+  }
 
-  void faceBookSingIn() {}
+  void googleSignIn() {
+    // print("x");
+  }
 
-  void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: userName.text, password: password.text);
+  void forgotPass() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const ForgotPasswordPage();
+    }));
+  }
+
+  void faceBookSingIn() {
+    // print("Facebook Sign In");
   }
 
   @override
@@ -31,62 +63,71 @@ class LoginPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 120),
+
+                const Text(
                   "e-Panchayat",
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 42,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 25,
+
+                const SizedBox(
+                  height: 15,
                 ),
-                MyTextField(
-                  controller: userName,
-                  hintText: "Email",
-                  obscureText: false,
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      MyTextFormField(
+                        hintText: "Email",
+                        validator: _validateEmail,
+                        controller: email,
+                        obscureText: false,
+                        iconName: "email",
+                      ),
+                      const SizedBox(height: 20),
+                      ObsTextFormField(
+                        hintText: "Password",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          return null;
+                        },
+                        controller: password,
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(
+
+                const SizedBox(
                   height: 10,
                 ),
-                MyTextField(
-                  controller: password,
-                  hintText: "Password",
-                  obscureText: true,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ForgotPasswordPage();
-                          }));
-                        },
-                        child: Text(
+                        onPressed: () => forgotPass(),
+                        child: const Text(
                           "Forgot password?",
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 25,
+                const SizedBox(
+                  height: 5,
                 ),
                 //MyButton(onTap: signUserIn),
-                ElevatedButton(
-                    onPressed: () {
-                      //Navigator.pushNamed(context, 'z');
-                      signUserIn();
-                    },
+                /*ElevatedButton(
+                    onPressed: _submitForm,
                     child: Text(
                       "Login",
                       style: TextStyle(
@@ -97,9 +138,10 @@ class LoginPage extends StatelessWidget {
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                    )),
+                    )),*/
+                MyButton1(onTap: _submitForm, text: "Login"),
 
-                SizedBox(height: 25),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -108,7 +150,7 @@ class LoginPage extends StatelessWidget {
                         color: Colors.grey[400],
                       ),
                     ),
-                    Text("Or continue with"),
+                    const Text("Or continue with"),
                     Expanded(
                       child: Divider(
                         thickness: 0.5,
@@ -117,33 +159,33 @@ class LoginPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile1(
-                      onTap: () => googleSignIn,
+                    SquareTile(
+                      onTap: googleSignIn,
                       imagePath: 'lib/img/google.png',
                     ),
-                    SizedBox(width: 20),
-                    SquareTile1(
-                      onTap: () => faceBookSingIn,
+                    const SizedBox(width: 20),
+                    SquareTile(
+                      onTap: faceBookSingIn,
                       imagePath: "lib/img/facebook.png",
                     ),
                   ],
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?"),
-                    SizedBox(width: 1),
+                    const Text("Don't have an account?"),
+                    const SizedBox(width: 1),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, 'x');
                       },
-                      child: Text(
-                        "Register Now",
+                      child: const Text(
+                        "Register",
                         style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black,

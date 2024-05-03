@@ -11,7 +11,7 @@ class FunPage extends StatefulWidget {
 }
 
 class _FunPageState extends State<FunPage> {
-  final List _pages = [ServicePage(), UpdatesPage(), ProfilePage()];
+  final List _pages = [ServicePage(), const UpdatesPage(), ProfilePage()];
   int _selectedIndex = 0;
   void _navigateBottomBar(int index) {
     setState(() {
@@ -27,7 +27,7 @@ class _FunPageState extends State<FunPage> {
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         backgroundColor: Colors.grey[300],
-        items: [
+        items: const [
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.miscellaneous_services_outlined,

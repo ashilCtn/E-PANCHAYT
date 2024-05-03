@@ -7,22 +7,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //return ServicePage();
-    return FunPage();
+    return const FunPage();
   }
 }
-
-//
-//
-
-//
-//
-//
-//
-//
-//
-//
-// 
-// 
-// 
-// 
-// 

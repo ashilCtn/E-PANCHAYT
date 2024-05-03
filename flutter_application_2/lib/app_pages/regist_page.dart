@@ -1,16 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/my_textform_field.dart';
+import 'package:flutter_application_2/components/obscure_textformfield.dart';
+import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/my_textfield.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
   final TextEditingController _userName_1 = TextEditingController();
-  final TextEditingController _emailId = TextEditingController();
   final TextEditingController _wardNo = TextEditingController();
   final TextEditingController _mobNo = TextEditingController();
   final TextEditingController _password_1 = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
+  final TextEditingController _emailId = TextEditingController();
+  final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
 
   bool passwordConfirmed() {
     if (_password_1.text.trim() == _confirmPass.text.trim()) {
@@ -48,6 +51,24 @@ class RegistrationPage extends StatelessWidget {
     });
   }
 
+  void _submitForm() {
+    if (formKey2.currentState!.validate()) {
+      // Navigator.pushNamed(context, 'z');
+      registerFunc();
+      // print("hello");
+    }
+  }
+
+  String? _validatePhoneNum(value) {
+    if (value.isEmpty) {
+      return 'Please enter your phone number';
+    }
+    if (value.length != 10) {
+      return 'Please enter a 10-digit phone number';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,77 +78,119 @@ class RegistrationPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 100),
-                Text(
+                const SizedBox(height: 100),
+                const Text(
                   "Let's Get Started!",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 0.5),
-                Padding(
+                const SizedBox(height: 0.5),
+                const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text("Create an account to avail all features"),
                 ),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _userName_1,
-                    hintText: "Username",
-                    obscureText: false),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _emailId,
-                    hintText: "Email",
-                    obscureText: false),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _wardNo,
-                    hintText: "Ward no",
-                    obscureText: false),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _mobNo,
-                    hintText: "Mobile no",
-                    obscureText: false),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _password_1,
-                    hintText: "Password",
-                    obscureText: true),
-                SizedBox(height: 10),
-                MyTextField(
-                    controller: _confirmPass,
-                    hintText: "Confirm Password",
-                    obscureText: true),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    //Navigator.pushNamed(context, 'z');
-                    registerFunc();
-                  },
-                  child: Text(
-                    "Register",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                const SizedBox(
+                  height: 10,
                 ),
-                SizedBox(height: 15),
+                Form(
+                  key: formKey2,
+                  child: Column(
+                    children: [
+                      MyTextFormField(
+                        controller: _userName_1,
+                        hintText: "Username",
+                        obscureText: false,
+                        iconName: "person_alt_circle_fill",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a username';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      MyTextFormField(
+                          hintText: "Email",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter your email";
+                            }
+                            RegExp emailRegExp =
+                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,4}$');
+                            if (!emailRegExp.hasMatch(value)) {
+                              return 'Please enter a Valid email';
+                            }
+                            return null;
+                          },
+                          controller: _emailId,
+                          obscureText: false,
+                          iconName: "email"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      MyTextFormField(
+                        controller: _wardNo,
+                        hintText: "Ward no",
+                        obscureText: false,
+                        iconName: "building",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the ward number';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      MyTextFormField(
+                        controller: _mobNo,
+                        hintText: "Mobile no",
+                        obscureText: false,
+                        iconName: "phone",
+                        validator: _validatePhoneNum,
+                      ),
+                      const SizedBox(height: 10),
+                      ObsTextFormField(
+                        hintText: "Password",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          return null;
+                        },
+                        controller: _password_1,
+                      ),
+                      const SizedBox(height: 10),
+                      ObsTextFormField(
+                        hintText: "Password",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          if (_password_1.text != _confirmPass.text) {
+                            return 'Password do not match';
+                          }
+                          return null;
+                        },
+                        controller: _confirmPass,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                MyButton1(onTap: _submitForm, text: "Login"),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?"),
-                    SizedBox(width: 1),
+                    const Text("Already have an account?"),
+                    const SizedBox(width: 1),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, 'y');
-                        //
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(
                           decoration: TextDecoration.underline,

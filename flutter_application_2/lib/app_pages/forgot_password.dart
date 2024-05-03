@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/my_textfield.dart';
+import 'package:flutter_application_2/components/my_button_new.dart';
+import 'package:flutter_application_2/components/my_textform_field.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -49,6 +50,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: Colors.black12,
         elevation: 0,
       ),
+      backgroundColor: Colors.blueGrey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -61,17 +63,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
           const SizedBox(height: 10),
-          MyTextField(
+          // MyTextField(
+          //   controller: _forgotpassController,
+          //   hintText: "Registered Email",
+          //   obscureText: false,
+          // ),
+          MyTextFormField(
+            hintText: "Email",
+            validator: null,
             controller: _forgotpassController,
-            hintText: "Registered Email",
             obscureText: false,
+            iconName: "email",
           ),
           const SizedBox(height: 10),
-          MaterialButton(
-            onPressed: passwordReset,
-            color: Colors.black12,
-            child: const Text('Reset Password'),
-          )
+          MyButton1(onTap: passwordReset, text: "Reset Password"),
+          // MaterialButton(
+          //   onPressed: passwordReset,
+          //   color: Colors.black12,
+          //   child: const Text('Reset Password'),
+          // )
         ],
       ),
     );

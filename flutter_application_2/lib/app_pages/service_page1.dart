@@ -4,7 +4,7 @@ import 'package:flutter_application_2/components/my_button.dart';
 class ServicePage extends StatelessWidget {
   ServicePage({super.key});
   final TextEditingController searchTwo = TextEditingController();
-  void LandTaxCheck() {}
+  void landTaxCheck() {}
   void getComplaints() {}
   void getDevInfo() {}
   void getNerbyServ() {}
@@ -28,7 +28,7 @@ class ServicePage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Padding(
@@ -36,7 +36,7 @@ class ServicePage extends StatelessWidget {
                   child: TextField(
                     controller: searchTwo,
                     decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -47,22 +47,22 @@ class ServicePage extends StatelessWidget {
                       hintText: "Search",
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       prefixIcon: IconButton(
-                          onPressed: searchFun, icon: Icon(Icons.search)),
+                          onPressed: searchFun, icon: const Icon(Icons.search)),
                     ),
                     obscureText: false,
                   ),
                 ),
-                SizedBox(height: 10),
-                MyButton(onTap: LandTaxCheck, text: "Land Tax Check"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
+                MyButton(onTap: landTaxCheck, text: "Land Tax Check"),
+                const SizedBox(height: 10),
                 MyButton(onTap: getComplaints, text: "Complaints"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyButton(onTap: getDevInfo, text: "Development Works"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyButton(onTap: getNerbyServ, text: "Nearby Services"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyButton(onTap: getCertificates, text: "Certificates"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyButton(onTap: getJobInfo, text: "Jobs"),
               ],
             ),
