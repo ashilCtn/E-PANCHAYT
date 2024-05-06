@@ -1,112 +1,7 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_application_2/services/firestore.dart';
-
-// class UpdatesPage extends StatefulWidget {
-//   const UpdatesPage({super.key});
-
-//   @override
-//   State<UpdatesPage> createState() => _UpdatesPageState();
-// }
-
-// class _UpdatesPageState extends State<UpdatesPage> {
-//   //firestore
-//   final FireStoreService fireStoreService = FireStoreService();
-//   //textcontroller
-//   final TextEditingController textController = TextEditingController();
-
-//   //open a dialog box to add a new update
-//   void openNoteBox({String? docID}) {
-//     showDialog(
-//         context: context,
-//         builder: (context) => AlertDialog(
-//               content: TextField(
-//                 controller: textController,
-//               ),
-//               actions: [
-//                 //botton to save the update string
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     //add a new node
-//                     if (docID == null) {
-//                       fireStoreService.createNode(textController.text);
-//                     }
-//                     //else update an existing node
-//                     else {
-//                       fireStoreService.updateNewNode(
-//                           docID, textController.text);
-//                     }
-
-//                     //clear the text controller
-//                     textController.clear();
-
-//                     //close the box
-//                     Navigator.pop(context);
-//                   },
-//                   child: const Text("ADD"),
-//                 )
-//               ],
-//             ));
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Updates')),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: openNoteBox,
-//         child: const Icon(Icons.add),
-//       ),
-//       body: StreamBuilder<QuerySnapshot>(
-//         stream: fireStoreService.readNode(),
-//         builder: (context, snapshot) {
-//           //if we have details, the get all docs
-//           if (snapshot.hasData) {
-//             List updatesList = snapshot.data!.docs;
-
-//             //display as a list
-//             return ListView.builder(
-//                 itemCount: updatesList.length,
-//                 itemBuilder: (context, index) {
-//                   //get each individual doc
-//                   DocumentSnapshot document = updatesList[index];
-//                   String docID = document.id;
-
-//                   //get node from each doc
-//                   Map<String, dynamic> data =
-//                       document.data() as Map<String, dynamic>;
-//                   String updateText = data['News Update'];
-
-//                   //display as a tile
-//                   return ListTile(
-//                       title: Text(updateText),
-//                       trailing: Row(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           IconButton(
-//                             onPressed: () => openNoteBox(docID: docID),
-//                             icon: const Icon(Icons.settings),
-//                           ),
-//                           //delete button
-//                           IconButton(
-//                               onPressed: () =>
-//                                   fireStoreService.deleteNode(docID),
-//                               icon: const Icon(Icons.delete)),
-//                         ],
-//                       ));
-//                 });
-//           }
-//           //if there is no data returned
-//           else {
-//             return const Text("No New Updates...");
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/services/firebase_storage_functions.dart';
 import 'package:flutter_application_2/services/firestore.dart';
 
 class UpdatesPage extends StatefulWidget {
@@ -119,23 +14,63 @@ class UpdatesPage extends StatefulWidget {
 class _UpdatesPageState extends State<UpdatesPage> {
   final FireStoreService fireStoreService = FireStoreService();
   final TextEditingController textController = TextEditingController();
+  final TextEditingController textController2 = TextEditingController();
+  String imageURL = '';
 
   void openNoteBox({String? docID}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: TextField(
-          controller: textController,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller:
+                  textController, // Assuming textController1 is declared for the first TextField
+              decoration: const InputDecoration(
+                  labelText: 'Title'), // Optional: Add a label
+            ),
+            TextField(
+              controller:
+                  textController2, // Assuming textController2 is declared for the second TextField
+              decoration: const InputDecoration(
+                  labelText: 'Details'), // Optional: Add a label
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            IconButton(
+              onPressed: () async {
+                File? selectedImage = await getImageFromGallery(context);
+                if (selectedImage != null) {
+                  imageURL = await uploadFileForUser(selectedImage);
+                  // print(success);
+                } else {
+                  imageURL =
+                      'https://imgs.search.brave.com/fXArEBHCg1XnRCIrQhgRljgvjO2sGwDAgvd7EkavsrM/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cHVibGljZG9tYWlu/cGljdHVyZXMubmV0/L3BpY3R1cmVzLzI4/MDAwMC92ZWxrYS9u/b3QtZm91bmQtaW1h/Z2UtMTUzODM4NjQ3/ODdsdS5qcGc';
+                }
+              },
+              icon: const Icon(
+                  Icons.photo), // Change the icon as per your requirement
+              color:
+                  Colors.blue, // Change the icon color as per your requirement
+              iconSize: 25, // Change the icon size as per your requirement
+            ),
+            // Add more TextField widgets as needed
+          ],
         ),
         actions: [
           ElevatedButton(
             onPressed: () {
               if (docID == null) {
-                fireStoreService.createNode(textController.text);
+                fireStoreService.createNode(
+                    textController.text, textController2.text, imageURL);
               } else {
-                fireStoreService.updateNewNode(docID, textController.text);
+                fireStoreService.updateNewNode(
+                    docID, textController.text, textController2.text, imageURL);
               }
               textController.clear();
+              textController2.clear();
               Navigator.pop(context);
             },
             child: const Text("ADD"),
@@ -172,7 +107,9 @@ class _UpdatesPageState extends State<UpdatesPage> {
                 String docID = document.id;
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
-                String updateText = data['News Update'];
+                String updateTextHeading = data['News Update Heading'];
+                String updateTextDetails = data['News Update Details'];
+                String imageURL = data['ImageURL'];
 
                 return Container(
                   margin: const EdgeInsets.symmetric(
@@ -192,24 +129,76 @@ class _UpdatesPageState extends State<UpdatesPage> {
                   ),
                   child: ListTile(
                     title: Text(
-                      updateText,
+                      updateTextHeading,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Colors.white, // Text color
+                      ),
+                    ),
+                    subtitle: Text(
+                      updateTextDetails,
+                      style: const TextStyle(
                         color: Colors.white, // Text color
                       ),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          onPressed: () => openNoteBox(docID: docID),
-                          icon: const Icon(Icons.settings),
-                          color: Colors.white, // Icon color
+                        PopupMenuButton(
+                          icon: const Icon(
+                            Icons.more_vert,
+                            color: Colors.white, // Icon color
+                          ),
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry>[
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.edit,
+                                  color: Colors.black, // Icon color
+                                ),
+                                title: const Text('Edit'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  openNoteBox(docID: docID);
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.delete,
+                                  color: Colors.black, // Icon color
+                                ),
+                                title: const Text('Delete'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  fireStoreService.deleteNode(docID);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          onPressed: () => fireStoreService.deleteNode(docID),
-                          icon: const Icon(Icons.delete),
-                          color: Colors.white, // Icon color
+                        const SizedBox(
+                            width:
+                                8), // Add spacing between the PopupMenuButton and the image box
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              10), // Adjust the radius as needed
+                          child: Container(
+                            width: 100, // Adjust the width as needed
+                            height: 50, // Adjust the height as needed
+                            color: Colors.grey, // Placeholder color
+                            child: imageURL.isNotEmpty
+                                ? Image.network(
+                                    imageURL,
+                                    fit: BoxFit.fill,
+                                  )
+                                : const Icon(
+                                    Icons.add_photo_alternate,
+                                    color: Colors.white,
+                                  ),
+                          ),
                         ),
                       ],
                     ),

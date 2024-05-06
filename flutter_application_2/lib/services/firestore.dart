@@ -6,9 +6,11 @@ class FireStoreService {
       FirebaseFirestore.instance.collection('Updates_List');
 
   //CREATE : add a new update
-  Future<void> createNode(String node) {
+  Future<void> createNode(String node, String node2, String imageURL) {
     return nodes.add({
-      'News Update': node,
+      'News Update Heading': node,
+      'News Update Details': node2,
+      'ImageURL': imageURL,
       'Date & Time': Timestamp.now(),
     });
   }
@@ -21,9 +23,12 @@ class FireStoreService {
   }
 
   //UPDATE :update the content
-  Future<void> updateNewNode(String docID, String newNode) {
+  Future<void> updateNewNode(
+      String docID, String newNode, String newNode2, String imageURL) {
     return nodes.doc(docID).update({
-      'News Update': newNode,
+      'News Update Heading': newNode,
+      'News Update Details': newNode2,
+      'ImageURL': imageURL,
       'Date & Time': Timestamp.now(),
     });
   }
