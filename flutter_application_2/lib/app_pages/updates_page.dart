@@ -142,8 +142,17 @@ class _UpdatesPageState extends State<UpdatesPage> {
                           color: Colors.white, // Text color
                         ),
                       ),
+                      // subtitle: Text(
+                      //   updateTextDetails,
+                      //   style: const TextStyle(
+                      //     color: Colors.white, // Text color
+                      //   ),
+                      // ),
                       subtitle: Text(
                         updateTextDetails,
+                        maxLines: 3, // Limiting to 3 lines
+                        overflow: TextOverflow
+                            .ellipsis, // Displaying ellipsis (...) if overflow
                         style: const TextStyle(
                           color: Colors.white, // Text color
                         ),
