@@ -1,9 +1,14 @@
 // import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/about_page.dart';
+import 'package:flutter_application_2/app_pages/addnewcontact_page.dart';
 import 'package:flutter_application_2/app_pages/auth_page.dart';
+import 'package:flutter_application_2/app_pages/contacts_page.dart';
 import 'package:flutter_application_2/app_pages/navbar_page.dart';
 import 'package:flutter_application_2/app_pages/home_page.dart';
 import 'package:flutter_application_2/app_pages/login_page.dart';
+import 'package:flutter_application_2/app_pages/profile_page.dart';
+import 'package:flutter_application_2/app_pages/signout_page.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_2/app_pages/updates_page.dart';
@@ -40,8 +45,13 @@ class MyApp extends StatelessWidget {
         'auth': (context) => const AuthPage(),
         'home': (context) => const HomePage(),
         'addNewUpdate': (context) => const AddNewUpdatePage(),
+        'contact': (context) => const ContactsPage(),
+        'addNewContact': (context) => const AddNewContactPage(),
+        'signout': (context) => SignOutPage(),
+        'about': (context) => const AboutPage(),
+        'profile': (context) => const ProfilePage(),
       },
-      home: const AuthPage(),
+      home: const AuthPage(), //ContactsPage()
     );
   }
 }

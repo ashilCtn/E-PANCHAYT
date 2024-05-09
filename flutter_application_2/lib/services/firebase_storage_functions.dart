@@ -41,3 +41,23 @@ Future<String> uploadFileForUser(File file) async {
     return '';
   }
 }
+
+Future<String> uploadProfilePicOfContact(File file) async {
+  try {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+    final storageRef = FirebaseStorage.instance.ref();
+    final fileName = file.path.split("/").last;
+    final timestamp = DateTime.now().microsecondsSinceEpoch;
+    final uploadRef =
+        storageRef.child("Profile Pics/$userId/uploads/$timestamp-$fileName");
+    await uploadRef.putFile(file);
+    return await uploadRef.getDownloadURL();
+  } catch (e) {
+    print('Error uploading profile pic: $e');
+    // Handle the error and return an empty string or handle it accordingly
+    return '';
+  }
+}
