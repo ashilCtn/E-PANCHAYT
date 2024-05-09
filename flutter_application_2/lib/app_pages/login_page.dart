@@ -19,11 +19,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //bool obscureText = true;
-
   void _submitForm() async {
     if (formKey.currentState!.validate()) {
-      // Navigator.pushNamed(context, 'z');
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text, password: password.text);
     }
@@ -40,9 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void googleSignIn() {
-    // print("x");
-  }
+  void googleSignIn() {}
 
   void forgotPass() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -50,154 +45,132 @@ class _LoginPageState extends State<LoginPage> {
     }));
   }
 
-  void faceBookSingIn() {
-    // print("Facebook Sign In");
-  }
+  void faceBookSingIn() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        // backgroundColor: Colors.grey[300],
         body: SafeArea(
             child: Center(
-          child: SingleChildScrollView(
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 120),
+            const Text(
+              "e-Panchayat",
+              style: TextStyle(
+                  // color: Colors.black,
+                  fontSize: 42,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  MyTextFormField(
+                    hintText: "Email",
+                    validator: _validateEmail,
+                    controller: email,
+                    obscureText: false,
+                    iconName: "email",
+                  ),
+                  const SizedBox(height: 20),
+                  ObsTextFormField(
+                    hintText: "Password",
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a Password';
+                      }
+                      return null;
+                    },
+                    controller: password,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => forgotPass(),
+                    child: const Text(
+                      "Forgot password?",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            MyNewButton(onTap: _submitForm, text: "Login"),
+            const SizedBox(height: 10),
+            Row(
               children: [
-                const SizedBox(height: 120),
-
-                const Text(
-                  "e-Panchayat",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(
-                  height: 15,
-                ),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      MyTextFormField(
-                        hintText: "Email",
-                        validator: _validateEmail,
-                        controller: email,
-                        obscureText: false,
-                        iconName: "email",
-                      ),
-                      const SizedBox(height: 20),
-                      ObsTextFormField(
-                        hintText: "Password",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a Password';
-                          }
-                          return null;
-                        },
-                        controller: password,
-                      ),
-                    ],
+                Expanded(
+                  child: Divider(
+                    thickness: 0.5,
+                    color: Colors.grey[400],
                   ),
                 ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () => forgotPass(),
-                        child: const Text(
-                          "Forgot password?",
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
+                const Text("  Or continue with  "),
+                Expanded(
+                  child: Divider(
+                    thickness: 0.5,
+                    color: Colors.grey[400],
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                //MyButton(onTap: signUserIn),
-                /*ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                    )),*/
-                MyButton1(onTap: _submitForm, text: "Login"),
-
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                    const Text("Or continue with"),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SquareTile(
-                      onTap: googleSignIn,
-                      imagePath: 'lib/img/google.png',
-                    ),
-                    const SizedBox(width: 20),
-                    SquareTile(
-                      onTap: faceBookSingIn,
-                      imagePath: "lib/img/facebook.png",
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account?"),
-                    const SizedBox(width: 1),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'x');
-                      },
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
-          ),
-        )));
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SquareTile(
+                  onTap: googleSignIn,
+                  imagePath: 'lib/img/google.png',
+                ),
+                // const SizedBox(width: 20),
+                // SquareTile(
+                //   onTap: faceBookSingIn,
+                //   imagePath: "lib/img/facebook.png",
+                // ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Don't have an account?"),
+                const SizedBox(width: 1),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'x');
+                  },
+                  child: const Text(
+                    "Register Now! ",
+                    style: TextStyle(
+                      // decoration: TextDecoration.underline,
+                      // color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    )));
   }
 }

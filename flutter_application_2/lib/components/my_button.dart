@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class MyButton extends StatelessWidget {
   final Function()? onTap;
@@ -13,7 +14,8 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: Colors.black,
+          gradient: const LinearGradient(
+              colors: [AppPallete.gradient1, AppPallete.gradient2]),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
@@ -22,7 +24,7 @@ class MyButton extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              // color: Colors.white,
             ),
           ),
         ),

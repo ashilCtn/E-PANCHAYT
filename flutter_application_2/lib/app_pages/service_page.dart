@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/my_button.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class ServicePage extends StatelessWidget {
   ServicePage({super.key});
@@ -15,14 +16,19 @@ class ServicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        title: Text("Service Page",style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: AppPallete.barAppNav,
+        automaticallyImplyLeading: false, // Remove back button
+        title: const Center(
+          child: Text(
+            "Services",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
-      body: Center(
-        child: Text("Services"),
-      ),*/
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -36,16 +42,7 @@ class ServicePage extends StatelessWidget {
                   child: TextField(
                     controller: searchTwo,
                     decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
                       hintText: "Search",
-                      hintStyle: TextStyle(color: Colors.grey[500]),
                       prefixIcon: IconButton(
                           onPressed: searchFun, icon: const Icon(Icons.search)),
                     ),

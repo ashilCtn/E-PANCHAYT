@@ -24,20 +24,20 @@ class RegistrationPage extends StatelessWidget {
     //tip!! >> add a pop up for showing the pass and confirm pass donot match
   }
 
-  Future registerFunc() async {
-    //just create a new user and password
-    if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailId.text.trim(), password: _password_1.text.trim());
-    }
-    //add user details
-    addNormalUserDetails(
-        _userName_1.text.trim(),
-        _emailId.text.trim(),
-        int.parse(_wardNo.text.trim()),
-        int.parse(_mobNo.text.trim()),
-        _password_1.text.trim());
-  }
+  // Future registerFunc() async {
+  //   //just create a new user and password
+  //   if (passwordConfirmed()) {
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: _emailId.text.trim(), password: _password_1.text.trim());
+  //   }
+  //   //add user details
+  //   addNormalUserDetails(
+  //       _userName_1.text.trim(),
+  //       _emailId.text.trim(),
+  //       int.parse(_wardNo.text.trim()),
+  //       int.parse(_mobNo.text.trim()),
+  //       _password_1.text.trim());
+  // }
 
   //function of firestore collection method in flutter to upload data to DB
   Future addNormalUserDetails(String userName, String email, int wardno,
@@ -51,11 +51,34 @@ class RegistrationPage extends StatelessWidget {
     });
   }
 
-  void _submitForm() {
+  Future registerFunc() async {
+    // Just create a new user and password
+    if (passwordConfirmed()) {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailId.text.trim(), password: _password_1.text.trim());
+
+        // Sign in the user after creating the account
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emailId.text.trim(), password: _password_1.text.trim());
+
+        // Add user details
+        addNormalUserDetails(
+            _userName_1.text.trim(),
+            _emailId.text.trim(),
+            int.parse(_wardNo.text.trim()),
+            int.parse(_mobNo.text.trim()),
+            _password_1.text.trim());
+      } catch (e) {
+        print("Error creating user: $e");
+      }
+    }
+  }
+
+  void _submitRegisterForm() {
     if (formKey2.currentState!.validate()) {
       // Navigator.pushNamed(context, 'z');
       registerFunc();
-      // print("hello");
     }
   }
 
@@ -72,7 +95,7 @@ class RegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      // backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -179,7 +202,7 @@ class RegistrationPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyButton1(onTap: _submitForm, text: "Login"),
+                MyNewButton(onTap: _submitRegisterForm, text: "Register"),
                 const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +217,7 @@ class RegistrationPage extends StatelessWidget {
                         "Login",
                         style: TextStyle(
                           decoration: TextDecoration.underline,
-                          color: Colors.black,
+                          // color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

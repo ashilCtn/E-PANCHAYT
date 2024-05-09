@@ -27,17 +27,17 @@ class _ObsTextFormFieldState extends State<ObsTextFormField> {
         controller: widget.controller,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-          fillColor: Colors.grey.shade200,
-          filled: true,
+          //   enabledBorder: const OutlineInputBorder(
+          //     borderSide: BorderSide(color: Colors.white),
+          //   ),
+          //   focusedBorder: OutlineInputBorder(
+          //     borderSide: BorderSide(color: Colors.grey.shade400),
+          //   ),
+          //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+          // fillColor: Colors.grey.shade200,
+          // filled: true,
           hintText: widget.hintText,
-          hintStyle: TextStyle(color: Colors.grey[500]),
+          // hintStyle: TextStyle(color: Colors.grey[500]),
           suffixIcon: IconButton(
             onPressed: () {
               setState(() {

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -47,10 +48,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black12,
+        backgroundColor: AppPallete.barAppNav,
         elevation: 0,
       ),
-      backgroundColor: Colors.blueGrey,
+      // backgroundColor: Colors.blueGrey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -76,7 +77,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             iconName: "email",
           ),
           const SizedBox(height: 10),
-          MyButton1(onTap: passwordReset, text: "Reset Password"),
+          MyNewButton(onTap: passwordReset, text: "Reset Password"),
           // MaterialButton(
           //   onPressed: passwordReset,
           //   color: Colors.black12,

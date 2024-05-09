@@ -26,15 +26,18 @@ Future<File?> getImageFromGallery(BuildContext context) async {
 Future<String> uploadFileForUser(File file) async {
   try {
     final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
     final storageRef = FirebaseStorage.instance.ref();
     final fileName = file.path.split("/").last;
     final timestamp = DateTime.now().microsecondsSinceEpoch;
     final uploadRef = storageRef.child("$userId/uploads/$timestamp-$fileName");
     await uploadRef.putFile(file);
-    imageURL = await uploadRef.getDownloadURL();
-    return imageURL;
+    return await uploadRef.getDownloadURL();
   } catch (e) {
-    // print(e);
-    return 'https://imgs.search.brave.com/gazFCGOe9xDFa6FkkqVDEfgHJLnWx7A6mcXK76nYVq8/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzg5LzU1LzE1/LzM2MF9GXzg5NTUx/NTk2X0xkSEFaUnd6/M2k0RU00SjBOSE5I/eTJoRVVZRGZYYzBq/LmpwZw'; // Return an empty string or handle the error accordingly
+    print('Error uploading file: $e');
+    // Handle the error and return an empty string or handle it accordingly
+    return '';
   }
 }

@@ -15,12 +15,10 @@ class AuthPage extends StatelessWidget {
           //user logged in
           if (snapshot.hasData) {
             return const HomePage();
-            //Navigator.pushNamed(context, 'home');
           }
           //user not logged in
           else {
-            return LoginPage();
-            //Navigator.pushNamed(context, 'y');
+            return const LoginPage();
           }
         },
       ),
