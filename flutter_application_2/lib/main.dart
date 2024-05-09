@@ -1,3 +1,4 @@
+// import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/auth_page.dart';
 import 'package:flutter_application_2/app_pages/navbar_page.dart';
@@ -15,6 +16,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await FirebaseAppCheck.instance.activate(
+  //   webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+  //   androidProvider: AndroidProvider.debug,
+  // appleProvider: AppleProvider.appAttest,
+  // );
   runApp(const MyApp());
 }
 
