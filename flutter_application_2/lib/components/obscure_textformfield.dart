@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ObsTextFormField extends StatefulWidget {
-  final controller;
+  final TextEditingController controller;
   final String hintText;
   final String? Function(String?)? validator;
 

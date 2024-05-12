@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_2/app_pages/forgot_password.dart';
 import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/square_tile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         );
 
         if (mounted) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(); // Close loading dialog
         }
       } on FirebaseAuthException catch (e) {
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");
@@ -38,47 +39,43 @@ class _LoginPageState extends State<LoginPage> {
             "Please Check Your Internet Connection and Try Again...";
         if (e.code == 'invalid-credential') {
           errorMessage = "Please Check User Credentials !!";
-        } else if (e.code == 'wrong-password') {
-          errorMessage = "Wrong password";
-
-          ///not working
+        } else if (e.code == 'too-many-requests') {
+          errorMessage = "Too-Many-Requests\nTry Again Later...";
         }
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(
-                      errorMessage,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    errorMessage,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                //side: BorderSide(color: Colors.red, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-
-              backgroundColor: AppPallete.greyColor,
-              elevation: 0,
-              margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height - 105,
-                  left: 20,
-                  right: 20), // Adjust top margin as needed
-              padding: EdgeInsets.zero,
             ),
-          );
-
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: AppPallete.greyColor,
+            elevation: 0,
+            margin: const EdgeInsets.all(20), // Adjust margin as needed
+            padding: EdgeInsets.zero,
+          ),
+        );
+        if (mounted) {
           Navigator.of(context).pop(); // Close loading dialog
         }
       } catch (e) {
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$e");
+        if (mounted) {
+          Navigator.of(context).pop(); // Close loading dialog
+        }
       }
     }
   }
@@ -114,148 +111,115 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: Colors.grey[300],
-        body: SafeArea(
-            child: Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            const Text(
-              "e-Panchayat",
-              style: TextStyle(
-                  // color: Colors.black,
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  MyTextFormField(
-                    hintText: "Email",
-                    validator: _validateEmail,
-                    controller: email,
-                    obscureText: false,
-                    iconName: "email",
-                  ),
-                  const SizedBox(height: 20),
-                  ObsTextFormField(
-                    hintText: "Password",
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a Password';
-                      }
-                      return null;
-                    },
-                    controller: password,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => forgotPass(),
-                    child: const Text(
-                      "Forgot password?",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            MyNewButton(onTap: _submitForm, text: "Login"),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    thickness: 0.5,
-                    color: Colors.grey[400],
-                  ),
-                ),
-                const Text("  Or continue with  "),
-                Expanded(
-                  child: Divider(
-                    thickness: 0.5,
-                    color: Colors.grey[400],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
+      resizeToAvoidBottomInset:
+          false, // Ensure Scaffold doesn't resize when keyboard is displayed
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SquareTile(
-                  onTap: googleSignIn,
-                  imagePath: 'lib/img/google.png',
+                const SizedBox(height: 120),
+                const Text(
+                  "e-Panchayat",
+                  style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Don't have an account?"),
-                const SizedBox(width: 1),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'x');
-                  },
-                  child: const Text(
-                    "Register Now! ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                const SizedBox(height: 15),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      MyTextFormField(
+                        hintText: "Email",
+                        validator: _validateEmail,
+                        controller: email,
+                        obscureText: false,
+                        iconName: "email",
+                      ),
+                      const SizedBox(height: 20),
+                      ObsTextFormField(
+                        hintText: "Password",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          return null;
+                        },
+                        controller: password,
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => forgotPass(),
+                        child: const Text(
+                          "Forgot password?",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 5),
+                MyNewButton(onTap: _submitForm, text: "Login"),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    const Text("  Or continue with  "),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SquareTile(
+                      onTap: googleSignIn,
+                      imagePath: 'lib/img/google.png',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account?"),
+                    const SizedBox(width: 1),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'x');
+                      },
+                      child: const Text(
+                        "Register Now! ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
-    )));
+    );
   }
 }
-
-// ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(
-//             content: const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Center(
-//                 child: Padding(
-//                   padding: EdgeInsets.all(8.0),
-//                   child: Text(
-//                     "Failed to log in. Please check your internet connection.",
-//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             behavior: SnackBarBehavior.floating,
-//             shape: RoundedRectangleBorder(
-//               //side: BorderSide(color: Colors.red, width: 1),
-//               borderRadius: BorderRadius.circular(24),
-//             ),
-
-//             backgroundColor: Colors.white,
-//             elevation: 0,
-//             margin:
-//                 const EdgeInsets.only(top: 50), // Adjust top margin as needed
-//             padding: EdgeInsets.zero,
-//           ),
-//         );

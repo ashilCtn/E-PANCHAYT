@@ -17,8 +17,10 @@ class _SignOutPageState extends State<SignOutPage> {
     try {
       Loader.showLoadingDialog(context);
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/');
+      if (mounted) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacementNamed('/');
+      }
     } on FirebaseAuthException catch (e) {
       // An error occurred while signing out.
       print("Error signing out: $e");

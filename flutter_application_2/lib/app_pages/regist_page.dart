@@ -54,7 +54,7 @@ class RegistrationPage extends StatelessWidget {
             int.parse(_mobNo.text.trim()),
             _password_1.text.trim());
       } catch (e) {
-        print("Error creating user: $e");
+        // print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");
         Navigator.of(context).pop();
       }
     }

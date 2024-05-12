@@ -36,7 +36,7 @@ Future<String> uploadFileForUser(File file) async {
     await uploadRef.putFile(file);
     return await uploadRef.getDownloadURL();
   } catch (e) {
-    print('Error uploading file: $e');
+    // print('Error uploading file: $e');
     // Handle the error and return an empty string or handle it accordingly
     return '';
   }
@@ -56,7 +56,7 @@ Future<String> uploadProfilePicOfContact(File file) async {
     await uploadRef.putFile(file);
     return await uploadRef.getDownloadURL();
   } catch (e) {
-    print('Error uploading profile pic: $e');
+    // print('Error uploading profile pic: $e');
     // Handle the error and return an empty string or handle it accordingly
     return '';
   }
