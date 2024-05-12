@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/services/firestore_register.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -9,18 +11,40 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final List<String> _expectednumbers = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9'
-  ];
-  String _selectedNumber = '1';
+  /////////////////////////////////////////////////////////////////////////////
+  FireStoreRegister fireStoreRegister = FireStoreRegister();
+  final user = FirebaseAuth.instance.currentUser!;
+  String userName = '';
+  String emailid = '';
+  String mobileNo = '';
+  String wardNo = '';
+
+  void getUserData() async {
+    String? currentUserEmail = user.email; // Replace with the actual email
+    if (currentUserEmail != null) {
+      UserData? userData =
+          await fireStoreRegister.getCurrentUserData(currentUserEmail);
+      if (userData != null) {
+        setState(() {
+          userName = userData.userName;
+          emailid = userData.emailid;
+          mobileNo = userData.mobileNo;
+          wardNo = userData.wardNo;
+        });
+        print(userName);
+      }
+    } else {
+      print('User data not found!');
+    }
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,22 +89,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         _buildDetailRow(
                           'Username:',
-                          'John Doe',
+                          userName,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
                           'Email ID:',
-                          'johndoe@example.com',
+                          emailid,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
                           'Mobile No:',
-                          '+1234567890',
+                          mobileNo,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
                           'Ward No:',
-                          'Ward A1',
+                          wardNo,
                         ),
                       ],
                     ),
@@ -89,25 +113,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const Divider(), // Add a divider after the card
-            ListTile(
-              title: const Text(
-                'Family Count',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              trailing: DropdownButton<String>(
-                value: _selectedNumber,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedNumber = newValue!;
-                  });
-                },
-                items: _expectednumbers
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+            const Card(
+              child: ListTile(
+                title: Text(
+                  'Family Count',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             const Divider(),

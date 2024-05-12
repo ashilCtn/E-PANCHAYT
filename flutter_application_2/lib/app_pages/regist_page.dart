@@ -3,8 +3,8 @@ import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_2/services/firestore_register.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
@@ -16,6 +16,8 @@ class RegistrationPage extends StatelessWidget {
   final TextEditingController _emailId = TextEditingController();
   final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
 
+  final FireStoreRegister fireStoreRegister = FireStoreRegister();
+
   bool passwordConfirmed() {
     if (_password_1.text.trim() == _confirmPass.text.trim()) {
       return true;
@@ -25,16 +27,16 @@ class RegistrationPage extends StatelessWidget {
     //tip!! >> add a pop up for showing the pass and confirm pass donot match
   }
 
-  Future addNormalUserDetails(String userName, String email, int wardno,
-      int mobileno, String password) async {
-    await FirebaseFirestore.instance.collection('NormalUsers').add({
-      'Username': userName,
-      'Email': email,
-      'Wardno': wardno,
-      'Mobileno': mobileno,
-      'Password': password,
-    });
-  }
+  // Future addNormalUserDetails(String userName, String email, int wardno,
+  //     int mobileno, String password) async {
+  //   await FirebaseFirestore.instance.collection('Normal_Users').add({
+  //     'Username': userName,
+  //     'Email': email,
+  //     'Wardno': wardno,
+  //     'Mobileno': mobileno,
+  //     'Password': password,
+  //   });
+  // }
 
   Future registerFunc(BuildContext context) async {
     Loader.showLoadingDialog(context);
@@ -47,11 +49,11 @@ class RegistrationPage extends StatelessWidget {
         Navigator.pushNamed(context, 'z');
 
         // Add user details
-        addNormalUserDetails(
+        fireStoreRegister.addNormalUserDetails(
             _userName_1.text.trim(),
             _emailId.text.trim(),
-            int.parse(_wardNo.text.trim()),
-            int.parse(_mobNo.text.trim()),
+            _wardNo.text.trim(),
+            _mobNo.text.trim(),
             _password_1.text.trim());
       } catch (e) {
         // print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/signout_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
 
 class MoreMainPage extends StatefulWidget {
   const MoreMainPage({super.key, Key? key2});
@@ -78,7 +78,7 @@ class _MoreMainPageState extends State<MoreMainPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SignOutPage()));
+                            builder: (context) => const AboutPage()));
                   },
                 ),
               ),

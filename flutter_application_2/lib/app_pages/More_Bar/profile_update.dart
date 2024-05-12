@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
+import 'package:flutter_application_2/services/profile_firestore.dart';
 
 class ProfileUpdatePage extends StatefulWidget {
   const ProfileUpdatePage({super.key});
@@ -9,9 +10,9 @@ class ProfileUpdatePage extends StatefulWidget {
 }
 
 class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
-  final name = TextEditingController();
-  final relationWithUser = TextEditingController();
-  final aadhaarNumber = TextEditingController();
+  List<TextEditingController> nameControllers = [];
+  List<TextEditingController> relationControllers = [];
+  List<TextEditingController> aadhaarControllers = [];
   final List<String> _expectednumbers = [
     '1',
     '2',
@@ -25,9 +26,24 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
   ];
   String _selectedNumber = '1';
 
+  final FireStoreServiceProfile _firestoreService = FireStoreServiceProfile();
+  List<FamilyMember> familyMembers = [];
+
   List<Widget> _buildFamilyMemberContainers(int count) {
+    nameControllers.clear();
+    relationControllers.clear();
+    aadhaarControllers.clear();
+
     List<Widget> containers = [];
     for (int i = 0; i < count; i++) {
+      TextEditingController nameController = TextEditingController();
+      TextEditingController relationController = TextEditingController();
+      TextEditingController aadhaarController = TextEditingController();
+
+      nameControllers.add(nameController);
+      relationControllers.add(relationController);
+      aadhaarControllers.add(aadhaarController);
+
       containers.add(
         Container(
           decoration: BoxDecoration(
@@ -48,22 +64,19 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
               const SizedBox(height: 10),
               ListTile(
                 title: UpdatePageTextField(
-                  controller:
-                      TextEditingController(), // You can provide your own controllers here
+                  controller: nameController,
                   hintText: 'Name',
                 ),
               ),
               ListTile(
                 title: UpdatePageTextField(
-                  controller:
-                      TextEditingController(), // You can provide your own controllers here
+                  controller: relationController,
                   hintText: 'Relation with User',
                 ),
               ),
               ListTile(
                 title: UpdatePageTextField(
-                  controller:
-                      TextEditingController(), // You can provide your own controllers here
+                  controller: aadhaarController,
                   hintText: 'Aadhaar',
                 ),
               ),
@@ -92,6 +105,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
           IconButton(
             onPressed: () {
               //upload to firestore
+              saveToFirebase();
             },
             icon: const Icon(Icons.done_all_rounded),
           ),
@@ -136,5 +150,19 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
         ),
       ),
     );
+  }
+
+  void saveToFirebase() {
+    familyMembers.clear(); // Clear existing family members
+    for (int i = 0; i < int.parse(_selectedNumber); i++) {
+      familyMembers.add(
+        FamilyMember(
+          name: nameControllers[i].text,
+          relationwithuser: relationControllers[i].text,
+          aadhaar: aadhaarControllers[i].text,
+        ),
+      );
+    }
+    _firestoreService.saveToFirebase(familyMembers);
   }
 }

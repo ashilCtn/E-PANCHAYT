@@ -37,4 +37,5 @@ class FireStoreService {
   Future<void> deleteNode(String docID) {
     return nodes.doc(docID).delete();
   }
+  //READ : current user data
 }

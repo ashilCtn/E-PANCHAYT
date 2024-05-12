@@ -41,7 +41,7 @@ class _FunPageState extends State<FunPage> {
             backgroundColor: AppPallete.barAppNav,
             color: Colors.white,
             activeColor: Colors.white,
-            tabBackgroundColor: const Color.fromARGB(178, 43, 43, 43),
+            tabBackgroundColor: AppPallete.barAppNav,
             gap: 8,
             selectedIndex: _selectedIndex, // Set the selected index here
             onTabChange: _navigateBottomBar,
