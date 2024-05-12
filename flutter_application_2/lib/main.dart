@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/addnewcontact_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/more_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/profile_update.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/settings_page.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/contacts_page.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         'profile': (context) => const ProfilePage(),
         'signout': (context) => const SignOutPage(),
         'settings': (context) => const SettingsPage(),
+        'profileupdate': (context) => const ProfileUpdatePage(),
       },
       home: const AuthPage(),
       // ),
