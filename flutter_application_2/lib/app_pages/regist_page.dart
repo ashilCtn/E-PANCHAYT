@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
@@ -24,22 +25,6 @@ class RegistrationPage extends StatelessWidget {
     //tip!! >> add a pop up for showing the pass and confirm pass donot match
   }
 
-  // Future registerFunc() async {
-  //   //just create a new user and password
-  //   if (passwordConfirmed()) {
-  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //         email: _emailId.text.trim(), password: _password_1.text.trim());
-  //   }
-  //   //add user details
-  //   addNormalUserDetails(
-  //       _userName_1.text.trim(),
-  //       _emailId.text.trim(),
-  //       int.parse(_wardNo.text.trim()),
-  //       int.parse(_mobNo.text.trim()),
-  //       _password_1.text.trim());
-  // }
-
-  //function of firestore collection method in flutter to upload data to DB
   Future addNormalUserDetails(String userName, String email, int wardno,
       int mobileno, String password) async {
     await FirebaseFirestore.instance.collection('NormalUsers').add({
@@ -51,16 +36,15 @@ class RegistrationPage extends StatelessWidget {
     });
   }
 
-  Future registerFunc() async {
+  Future registerFunc(BuildContext context) async {
+    Loader.showLoadingDialog(context);
     // Just create a new user and password
     if (passwordConfirmed()) {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailId.text.trim(), password: _password_1.text.trim());
 
-        // Sign in the user after creating the account
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailId.text.trim(), password: _password_1.text.trim());
+        Navigator.pushNamed(context, 'z');
 
         // Add user details
         addNormalUserDetails(
@@ -71,14 +55,15 @@ class RegistrationPage extends StatelessWidget {
             _password_1.text.trim());
       } catch (e) {
         print("Error creating user: $e");
+        Navigator.of(context).pop();
       }
     }
   }
 
-  void _submitRegisterForm() {
+  void _submitRegisterForm(BuildContext context) {
     if (formKey2.currentState!.validate()) {
       // Navigator.pushNamed(context, 'z');
-      registerFunc();
+      registerFunc(context);
     }
   }
 
@@ -202,7 +187,11 @@ class RegistrationPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyNewButton(onTap: _submitRegisterForm, text: "Register"),
+                MyNewButton(
+                    onTap: () {
+                      _submitRegisterForm(context);
+                    },
+                    text: "Register"),
                 const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

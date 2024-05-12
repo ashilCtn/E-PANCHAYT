@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/forgot_password.dart';
+import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/square_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,16 +16,78 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController email = TextEditingController();
-
   final TextEditingController password = TextEditingController();
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     if (formKey.currentState!.validate()) {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text, password: password.text);
+      try {
+        Loader.showLoadingDialog(context);
+
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email.text.trim(),
+          password: password.text.trim(),
+        );
+
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      } on FirebaseAuthException catch (e) {
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");
+        String errorMessage =
+            "Please Check Your Internet Connection and Try Again...";
+        if (e.code == 'invalid-credential') {
+          errorMessage = "Please Check User Credentials !!";
+        } else if (e.code == 'wrong-password') {
+          errorMessage = "Wrong password";
+
+          ///not working
+        }
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      errorMessage,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                //side: BorderSide(color: Colors.red, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+
+              backgroundColor: AppPallete.greyColor,
+              elevation: 0,
+              margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height - 105,
+                  left: 20,
+                  right: 20), // Adjust top margin as needed
+              padding: EdgeInsets.zero,
+            ),
+          );
+
+          Navigator.of(context).pop(); // Close loading dialog
+        }
+      } catch (e) {
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$e");
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
   }
 
   String? _validateEmail(value) {
@@ -37,15 +101,15 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void googleSignIn() {}
+  void googleSignIn() {
+    print('google sign in\n');
+  }
 
   void forgotPass() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const ForgotPasswordPage();
     }));
   }
-
-  void faceBookSingIn() {}
 
   @override
   Widget build(BuildContext context) {
@@ -140,11 +204,6 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: googleSignIn,
                   imagePath: 'lib/img/google.png',
                 ),
-                // const SizedBox(width: 20),
-                // SquareTile(
-                //   onTap: faceBookSingIn,
-                //   imagePath: "lib/img/facebook.png",
-                // ),
               ],
             ),
             const SizedBox(height: 20),
@@ -160,8 +219,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text(
                     "Register Now! ",
                     style: TextStyle(
-                      // decoration: TextDecoration.underline,
-                      // color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -174,3 +231,31 @@ class _LoginPageState extends State<LoginPage> {
     )));
   }
 }
+
+// ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content: const Padding(
+//               padding: EdgeInsets.all(8.0),
+//               child: Center(
+//                 child: Padding(
+//                   padding: EdgeInsets.all(8.0),
+//                   child: Text(
+//                     "Failed to log in. Please check your internet connection.",
+//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             behavior: SnackBarBehavior.floating,
+//             shape: RoundedRectangleBorder(
+//               //side: BorderSide(color: Colors.red, width: 1),
+//               borderRadius: BorderRadius.circular(24),
+//             ),
+
+//             backgroundColor: Colors.white,
+//             elevation: 0,
+//             margin:
+//                 const EdgeInsets.only(top: 50), // Adjust top margin as needed
+//             padding: EdgeInsets.zero,
+//           ),
+//         );

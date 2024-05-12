@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/signout_page.dart';
 
 class MoreMainPage extends StatefulWidget {
   const MoreMainPage({super.key, Key? key2});
@@ -12,7 +13,13 @@ class _MoreMainPageState extends State<MoreMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('', style: TextStyle(color: Colors.black)),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, 'z');
+          },
+        ),
         centerTitle: true,
         // backgroundColor: const Color.fromARGB(188, 0, 0, 0),
       ),
@@ -45,20 +52,33 @@ class _MoreMainPageState extends State<MoreMainPage> {
               ),
               Card(
                 child: ListTile(
-                  title: const Text('Sign Out'),
+                  title: const Text('Settings'),
                   onTap: () {
                     // Add your action here when Sign Out is tapped
-                    Navigator.pushNamed(context, 'signout');
+                    Navigator.pushNamed(context, 'settings');
                   },
                 ),
               ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text('Sign Out'),
+              //     onTap: () {
+              //       // Add your action here when Sign Out is tapped
+              //       Navigator.pushNamed(context, 'signout');
+              //     },
+              //   ),
+              // ),
               Card(
                 child: ListTile(
                   title: const Text('About'),
                   onTap: () {
                     // Add your action here when About is tapped
                     // print('About tapped');
-                    Navigator.pushNamed(context, 'about');
+                    // Navigator.pushNamed(context, 'about');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignOutPage()));
                   },
                 ),
               ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app_pages/more_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/more_page.dart';
 import 'package:flutter_application_2/app_pages/service_page.dart';
 import 'package:flutter_application_2/app_pages/updates_page.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_application_2/app_pages/updates_page.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firebase_storage_functions.dart';

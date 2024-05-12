@@ -27,6 +27,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
         ),
         centerTitle: true,
         backgroundColor: AppPallete.barAppNav,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
               onPressed: () {

@@ -40,6 +40,7 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
             Navigator.pushNamed(context, 'contact');
           },
         ),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {

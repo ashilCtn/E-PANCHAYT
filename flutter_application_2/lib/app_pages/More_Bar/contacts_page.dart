@@ -26,7 +26,13 @@ class _ContactsPageState extends State<ContactsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppPallete.barAppNav,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, 'more');
+          },
+        ),
         title: const Text(
           'Contacts',
           style: TextStyle(fontWeight: FontWeight.bold),
