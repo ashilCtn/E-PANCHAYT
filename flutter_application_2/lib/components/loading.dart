@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Loader {
   static Future showLoadingDialog(BuildContext context) {
@@ -8,7 +10,11 @@ class Loader {
           false, // Prevents dismissing the dialog by tapping outside
       builder: (context) {
         return const Center(
-          child: CircularProgressIndicator(),
+          // child: CircularProgressIndicator(),
+          child: SpinKitSpinningLines(
+            color: AppPallete.whiteColor,
+            size: 80,
+          ),
         );
       },
     );

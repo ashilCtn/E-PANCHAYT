@@ -10,5 +10,6 @@ class AppPallete {
   static const Color greyColor = Colors.grey;
   static const Color errorColor = Colors.redAccent;
   static const Color transparentColor = Colors.transparent;
-  static const Color barAppNav = Color.fromARGB(169, 16, 16, 16);
+  static const Color barAppNav = Color.fromARGB(185, 0, 0, 0);
+  static const Color overlay = Color.fromARGB(77, 78, 77, 77);
 }

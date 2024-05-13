@@ -90,7 +90,18 @@ class _AddNewUpdatePageState extends State<AddNewUpdatePage> {
           child: Column(
             children: [
               image != null
-                  ? Image.file(image!)
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          10), // Match the DottedBorder's radius
+                      child: SizedBox(
+                        // Set the width to match the DottedBorder's size
+                        height: 150,
+                        child: Image.file(
+                          image!,
+                          fit: BoxFit.fill, // Set fit to cover the area
+                        ),
+                      ),
+                    )
                   : GestureDetector(
                       onTap: () {
                         selectImage();

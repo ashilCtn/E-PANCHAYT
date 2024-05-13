@@ -12,12 +12,19 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundImage: NetworkImage(imageUrl),
-      backgroundColor: Colors.grey[300], // Placeholder color
-      // You can also use AssetImage for local images:
-      // backgroundImage: AssetImage('assets/images/profile.png'),
+    return ClipOval(
+      child: Container(
+        width: radius * 2,
+        height: radius * 2,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.fill, // Set the BoxFit property here
+          ),
+          color: Colors.grey[300], // Placeholder color
+        ),
+      ),
     );
   }
 }
