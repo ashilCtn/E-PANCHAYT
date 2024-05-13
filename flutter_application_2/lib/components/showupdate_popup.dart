@@ -27,17 +27,19 @@ Future<void> showCustomDialog(BuildContext context, String title,
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20), // Adjusted padding
-                      child: Container(
-                        height: MediaQuery.of(context).size.height *
-                            0.2, // Adjusted height
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(imageURL),
-                            fit: BoxFit.cover,
+                      child: SingleChildScrollView(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height *
+                              0.2, // Adjusted height
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(imageURL),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),

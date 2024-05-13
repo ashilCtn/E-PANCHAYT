@@ -15,6 +15,7 @@ import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_2/app_pages/updates_page.dart';
 import 'package:flutter_application_2/app_pages/addnewupdate_page.dart';
+// import 'package:flutter_application_2/core/theme/splash.dart';
 // import 'package:flutter_application_2/core/theme/network/connectivity_services.dart.txt';
 import 'package:flutter_application_2/core/theme/theme.dart';
 // import 'package:provider/provider.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         'settings': (context) => const SettingsPage(),
         'profileupdate': (context) => const ProfileUpdatePage(),
       },
+      // home: const SplashScreen(),
       home: const AuthPage(),
       // ),
     );

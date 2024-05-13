@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firebase_storage_functions.dart';
@@ -20,12 +21,32 @@ class _AddNewUpdatePageState extends State<AddNewUpdatePage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   String imageURL = ''; // Declare imageURL variable
+  File? image;
 
   @override
   void dispose() {
     super.dispose();
     titleController.dispose();
     contentController.dispose();
+  }
+
+  void selectImage() async {
+    Loader.showLoadingDialog(context);
+    final selectedImage = await getImageFromGallery(context);
+    if (selectedImage != null) {
+      setState(() {
+        image = selectedImage;
+      });
+      // print("Image Not @@@@@@@@@@@@@@@@@@@@@@@@@@@@@Selected\n");
+      imageURL = await uploadFileForUser(selectedImage);
+      // print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${imageURL}");
+      // print(imageURL);
+    } else {
+      print("Image Not Selected\n");
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -68,44 +89,40 @@ class _AddNewUpdatePageState extends State<AddNewUpdatePage> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              GestureDetector(
-                onTap: () async {
-                  File? selectedImage = await getImageFromGallery(context);
-                  if (selectedImage != null) {
-                    imageURL = await uploadFileForUser(selectedImage);
-                    // print(imageURL);
-                  } else {
-                    print("Image Not Selected\n");
-                  }
-                },
-                child: DottedBorder(
-                  color: AppPallete.borderColor,
-                  dashPattern: const [10, 4],
-                  radius: const Radius.circular(10),
-                  borderType: BorderType.RRect,
-                  strokeCap: StrokeCap.round,
-                  child: const SizedBox(
-                    height: 150,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder_open,
-                          size: 40,
+              image != null
+                  ? Image.file(image!)
+                  : GestureDetector(
+                      onTap: () {
+                        selectImage();
+                      },
+                      child: DottedBorder(
+                        color: AppPallete.borderColor,
+                        dashPattern: const [10, 4],
+                        radius: const Radius.circular(10),
+                        borderType: BorderType.RRect,
+                        strokeCap: StrokeCap.round,
+                        child: const SizedBox(
+                          height: 150,
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.folder_open,
+                                size: 40,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Select Your Image',
+                                style: TextStyle(fontSize: 15),
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Select Your Image',
-                          style: TextStyle(fontSize: 15),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
               const SizedBox(
                 height: 10,
               ),

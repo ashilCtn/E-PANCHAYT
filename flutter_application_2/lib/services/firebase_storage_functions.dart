@@ -32,7 +32,8 @@ Future<String> uploadFileForUser(File file) async {
     final storageRef = FirebaseStorage.instance.ref();
     final fileName = file.path.split("/").last;
     final timestamp = DateTime.now().microsecondsSinceEpoch;
-    final uploadRef = storageRef.child("$userId/uploads/$timestamp-$fileName");
+    final uploadRef =
+        storageRef.child("  $userId/uploads/$timestamp-$fileName");
     await uploadRef.putFile(file);
     return await uploadRef.getDownloadURL();
   } catch (e) {
