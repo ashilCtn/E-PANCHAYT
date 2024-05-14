@@ -202,7 +202,7 @@ class RegistrationPage extends StatelessWidget {
                     const SizedBox(width: 1),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, 'y');
+                        Navigator.pushNamed(context, 'auth');
                       },
                       child: const Text(
                         "Login",
