@@ -10,7 +10,6 @@ class Loader {
           false, // Prevents dismissing the dialog by tapping outside
       builder: (context) {
         return const Center(
-          // child: CircularProgressIndicator(),
           child: SpinKitSpinningLines(
             color: AppPallete.whiteColor,
             size: 80,

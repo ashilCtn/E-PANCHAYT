@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/profile_avatar.dart';
+import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firestore_contacts_crud.dart';
+import 'package:flutter_application_2/services/firestore_register.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -20,7 +23,29 @@ class _ContactsPageState extends State<ContactsPage> {
   final TextEditingController cDesignation = TextEditingController();
   final TextEditingController cNumber = TextEditingController();
   String imageURL = '';
+/////////////////////////////////////////////////////////////////////
+  //Role Retrieved
+  String role = '';
+  FireStoreRegister fireStoreRegister = FireStoreRegister();
+  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
 
+  Future<void> getUserRole() async {
+    AccessRole accessRole = AccessRole();
+    String retrievedRole = await accessRole.getUserRole();
+    if (mounted) {
+      setState(() {
+        role = retrievedRole;
+        print('#%#%%#%#%#%${role}erere');
+      });
+    }
+  }
+
+/////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +64,12 @@ class _ContactsPageState extends State<ContactsPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'addNewContact');
-              },
-              icon: const Icon(CupertinoIcons.person_badge_plus)),
+          if (role == 'admin' || role == 'superuser')
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'addNewContact');
+                },
+                icon: const Icon(CupertinoIcons.person_badge_plus)),
           const SizedBox(
             width: 10,
           ),
@@ -161,31 +187,36 @@ class _ContactsPageState extends State<ContactsPage> {
                                 },
                               ),
                             ),
-                            PopupMenuItem(
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.edit,
+                            if (role == 'admin' || role == 'superuser')
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(
+                                    Icons.edit,
+                                  ),
+                                  title: const Text('Edit'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    fireStoreServiceContacts
+                                        .deleteContact(docID);
+                                    Navigator.pushNamed(
+                                        context, 'addNewContact');
+                                  },
                                 ),
-                                title: const Text('Edit'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  fireStoreServiceContacts.deleteContact(docID);
-                                  Navigator.pushNamed(context, 'addNewContact');
-                                },
                               ),
-                            ),
-                            PopupMenuItem(
-                              child: ListTile(
-                                leading: const Icon(
-                                  CupertinoIcons.person_badge_minus,
+                            if (role == 'admin' || role == 'superuser')
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.person_badge_minus,
+                                  ),
+                                  title: const Text('Remove'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    fireStoreServiceContacts
+                                        .deleteContact(docID);
+                                  },
                                 ),
-                                title: const Text('Remove'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  fireStoreServiceContacts.deleteContact(docID);
-                                },
                               ),
-                            ),
                           ],
                         ),
                         const SizedBox(width: 8),

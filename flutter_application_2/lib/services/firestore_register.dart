@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireStoreRegister {
   Future addNormalUserDetails(String userName, String email, String wardno,
-      String mobileno, String password) async {
+      String mobileno, String password,
+      {String role = 'user'}) async {
     await FirebaseFirestore.instance.collection('Normal_Users').add({
       'Username': userName,
       'Email': email,
+      'Role': role,
       'Wardno': wardno,
       'Mobileno': mobileno,
       'Password': password,
@@ -34,6 +36,7 @@ class FireStoreRegister {
         emailid: userData['Email'],
         mobileNo: userData['Mobileno'],
         wardNo: userData['Wardno'],
+        role: userData['Role'],
       );
     } else {
       return null;
@@ -46,11 +49,13 @@ class UserData {
   final String emailid;
   final String mobileNo;
   final String wardNo;
+  final String role;
 
   UserData({
     required this.userName,
     required this.emailid,
     required this.mobileNo,
     required this.wardNo,
+    required this.role,
   });
 }

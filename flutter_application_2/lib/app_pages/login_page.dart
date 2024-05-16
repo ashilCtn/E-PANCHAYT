@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _submitForm() async {
     if (formKey.currentState!.validate()) {
       try {
-        Loader.showLoadingDialog(context);
+        Loader.showLoadingDialog(context); // Show loading dialog
 
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(),
@@ -32,15 +32,19 @@ class _LoginPageState extends State<LoginPage> {
 
         if (mounted) {
           Navigator.of(context).pop(); // Close loading dialog
+          Navigator.pushReplacementNamed(context, 'updatesPage');
         }
       } on FirebaseAuthException catch (e) {
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");
         String errorMessage =
             "Please Check Your Internet Connection and Try Again...";
         if (e.code == 'invalid-credential') {
           errorMessage = "Please Check User Credentials !!";
         } else if (e.code == 'too-many-requests') {
           errorMessage = "Too-Many-Requests\nTry Again Later...";
+        }
+
+        if (mounted) {
+          Navigator.of(context).pop(); // Close loading dialog if error occurs
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -64,17 +68,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
             backgroundColor: AppPallete.greyColor,
             elevation: 0,
-            margin: const EdgeInsets.all(20), // Adjust margin as needed
+            margin: const EdgeInsets.all(20),
             padding: EdgeInsets.zero,
           ),
         );
-        if (mounted) {
-          Navigator.of(context).pop(); // Close loading dialog
-        }
       } catch (e) {
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$e");
         if (mounted) {
-          Navigator.of(context).pop(); // Close loading dialog
+          Navigator.of(context)
+              .pop(); // Close loading dialog if general error occurs
         }
       }
     }
@@ -111,8 +112,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset:
-          false, // Ensure Scaffold doesn't resize when keyboard is displayed
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

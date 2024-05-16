@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/showupdate_popup.dart';
+import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firestore.dart';
+import 'package:flutter_application_2/services/firestore_register.dart';
 
 class UpdatesPage extends StatefulWidget {
   const UpdatesPage({super.key});
@@ -14,9 +17,38 @@ class UpdatesPage extends StatefulWidget {
 
 class _UpdatesPageState extends State<UpdatesPage> {
   final FireStoreService fireStoreService = FireStoreService();
+  FireStoreRegister fireStoreRegister = FireStoreRegister();
+  final user = FirebaseAuth.instance.currentUser!;
+
   final TextEditingController textController = TextEditingController();
   final TextEditingController textController2 = TextEditingController();
   String imageURL = '';
+
+  //Role Retrieved
+  String role = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<void> getUserRole() async {
+    AccessRole accessRole = AccessRole();
+    String retrievedRole = await accessRole.getUserRole();
+    if (mounted) {
+      setState(() {
+        role = retrievedRole;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    textController2.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +61,19 @@ class _UpdatesPageState extends State<UpdatesPage> {
         backgroundColor: AppPallete.barAppNav,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
+          if (role == 'admin' ||
+              role == 'superuser') // Conditional check for role
+            IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, 'addNewUpdate');
               },
-              icon: const Icon(CupertinoIcons.add_circled)),
+              icon: const Icon(CupertinoIcons.add_circled),
+            ),
           const SizedBox(
             width: 10,
           ),
         ],
       ),
-      // backgroundColor: Colors.white, // Dark background color
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: openNoteBox,
-      //   child: const Icon(Icons.add),
-      // ),
       body: StreamBuilder<QuerySnapshot>(
         stream: fireStoreService.readNode(),
         builder: (context, snapshot) {
@@ -124,44 +154,43 @@ class _UpdatesPageState extends State<UpdatesPage> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          PopupMenuButton(
-                            icon: const Icon(
-                              Icons.more_vert,
-                              // color: Colors.white, // Icon color
+                          if (role == 'admin' || role == 'superuser')
+                            PopupMenuButton(
+                              icon: const Icon(
+                                Icons.more_vert,
+                                // color: Colors.white, // Icon color
+                              ),
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry>[
+                                PopupMenuItem(
+                                  child: ListTile(
+                                    leading: const Icon(
+                                      Icons.edit,
+                                      // color: Colors.black, // Icon color
+                                    ),
+                                    title: const Text('Edit'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.pushNamed(
+                                          context, 'addNewUpdate');
+                                    },
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  child: ListTile(
+                                    leading: const Icon(
+                                      Icons.delete,
+                                      // color: Colors.black, // Icon color
+                                    ),
+                                    title: const Text('Delete'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      fireStoreService.deleteNode(docID);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry>[
-                              PopupMenuItem(
-                                child: ListTile(
-                                  leading: const Icon(
-                                    Icons.edit,
-                                    // color: Colors.black, // Icon color
-                                  ),
-                                  title: const Text('Edit'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    // openNoteBox(docID: docID);
-                                    Navigator.pushNamed(
-                                        context, 'addNewUpdate');
-                                    // return AddNewUpdatePage();
-                                  },
-                                ),
-                              ),
-                              PopupMenuItem(
-                                child: ListTile(
-                                  leading: const Icon(
-                                    Icons.delete,
-                                    // color: Colors.black, // Icon color
-                                  ),
-                                  title: const Text('Delete'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    fireStoreService.deleteNode(docID);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
                           const SizedBox(
                               width:
                                   8), // Add spacing between the PopupMenuButton and the image box

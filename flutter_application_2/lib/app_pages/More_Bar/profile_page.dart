@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
+import 'package:flutter_application_2/services/profile_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,11 +14,13 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   /////////////////////////////////////////////////////////////////////////////
   FireStoreRegister fireStoreRegister = FireStoreRegister();
+  FireStoreServiceProfile fireStoreServiceProfile = FireStoreServiceProfile();
   final user = FirebaseAuth.instance.currentUser!;
   String userName = '';
   String emailid = '';
   String mobileNo = '';
   String wardNo = '';
+  List<FamilyMember> familyMembers = [];
 
   void getUserData() async {
     String? currentUserEmail = user.email; // Replace with the actual email
@@ -38,9 +41,19 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void getFamilyMembers() async {
+    List<FamilyMember> members =
+        await fireStoreServiceProfile.getFromFirebase();
+    print(members);
+    setState(() {
+      familyMembers = members;
+    });
+  }
+
   @override
   void initState() {
     getUserData();
+    getFamilyMembers();
     super.initState();
   }
 
@@ -116,12 +129,62 @@ class _ProfilePageState extends State<ProfilePage> {
             const Card(
               child: ListTile(
                 title: Text(
-                  'Family Count',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  'Family Members',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
             const Divider(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: familyMembers.length,
+                itemBuilder: (context, index) {
+                  FamilyMember member = familyMembers[index];
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 40, // Adjust height as needed
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  10), // Half of the height
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: Center(child: Text('${index + 1}')),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                member.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Relation with User: ${member.relationwithuser}'),
+                                  Text('Aadhaar No: ${member.aadhaar}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/services/profile_firestore.dart';
 
@@ -105,7 +106,10 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
           IconButton(
             onPressed: () {
               //upload to firestore
+              // Loader.showLoadingDialog(context);
               saveToFirebase();
+              // Navigator.of(context).pop();
+              Navigator.pushNamed(context, 'profile');
             },
             icon: const Icon(Icons.done_all_rounded),
           ),

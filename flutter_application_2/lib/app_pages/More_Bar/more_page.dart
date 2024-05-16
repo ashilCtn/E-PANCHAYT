@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
+import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
+import 'package:flutter_application_2/services/firestore_register.dart';
 
 class MoreMainPage extends StatefulWidget {
   const MoreMainPage({super.key, Key? key2});
@@ -9,6 +12,29 @@ class MoreMainPage extends StatefulWidget {
 }
 
 class _MoreMainPageState extends State<MoreMainPage> {
+  /////////////////////////////////////////////////////////////////////
+  //Role Retrieved
+  String role = '';
+  FireStoreRegister fireStoreRegister = FireStoreRegister();
+  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<void> getUserRole() async {
+    AccessRole accessRole = AccessRole();
+    String retrievedRole = await accessRole.getUserRole();
+    if (mounted) {
+      setState(() {
+        role = retrievedRole;
+        print('#%#%%#%#%#%${role}erere');
+      });
+    }
+  }
+
+/////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +66,17 @@ class _MoreMainPageState extends State<MoreMainPage> {
                   },
                 ),
               ),
+              if (role == 'admin')
+                Card(
+                  child: ListTile(
+                    title: const Text('Admin Controls'),
+                    onTap: () {
+                      // Add your action here when Contacts is tapped
+                      // print('Contacts tapped');
+                      Navigator.pushNamed(context, 'adminlvl');
+                    },
+                  ),
+                ),
               Card(
                 child: ListTile(
                   title: const Text('Contacts'),
