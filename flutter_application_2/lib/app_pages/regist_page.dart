@@ -81,141 +81,169 @@ class RegistrationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 100),
-                const Text(
-                  "Let's Get Started!",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: () async {
+        final value = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Are you sure?"),
+              content: const Text("Do you want to go back?"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text("NO"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text("YES"),
+                ),
+              ],
+            );
+          },
+        );
+        if (value != null) {
+          return Future.value(value);
+        } else {
+          return Future.value(false);
+        }
+      },
+      child: Scaffold(
+        // backgroundColor: Colors.grey[300],
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  const Text(
+                    "Let's Get Started!",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 0.5),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Text("Create an account to avail all features"),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Form(
-                  key: formKey2,
-                  child: Column(
-                    children: [
-                      MyTextFormField(
-                        controller: _userName_1,
-                        hintText: "Username",
-                        obscureText: false,
-                        iconName: "person_alt_circle_fill",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a username';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      MyTextFormField(
-                          hintText: "Email",
+                  const SizedBox(height: 0.5),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: Text("Create an account to avail all features"),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Form(
+                    key: formKey2,
+                    child: Column(
+                      children: [
+                        MyTextFormField(
+                          controller: _userName_1,
+                          hintText: "Username",
+                          obscureText: false,
+                          iconName: "person_alt_circle_fill",
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Please enter your email";
-                            }
-                            RegExp emailRegExp =
-                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,4}$');
-                            if (!emailRegExp.hasMatch(value)) {
-                              return 'Please enter a Valid email';
+                              return 'Please enter a username';
                             }
                             return null;
                           },
-                          controller: _emailId,
+                        ),
+                        const SizedBox(height: 10),
+                        MyTextFormField(
+                            hintText: "Email",
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter your email";
+                              }
+                              RegExp emailRegExp = RegExp(
+                                  r'^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,4}$');
+                              if (!emailRegExp.hasMatch(value)) {
+                                return 'Please enter a Valid email';
+                              }
+                              return null;
+                            },
+                            controller: _emailId,
+                            obscureText: false,
+                            iconName: "email"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        MyTextFormField(
+                          controller: _wardNo,
+                          hintText: "Ward no",
                           obscureText: false,
-                          iconName: "email"),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      MyTextFormField(
-                        controller: _wardNo,
-                        hintText: "Ward no",
-                        obscureText: false,
-                        iconName: "building",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter the ward number';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      MyTextFormField(
-                        controller: _mobNo,
-                        hintText: "Mobile no",
-                        obscureText: false,
-                        iconName: "phone",
-                        validator: _validatePhoneNum,
-                      ),
-                      const SizedBox(height: 10),
-                      ObsTextFormField(
-                        hintText: "Password",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a Password';
-                          }
-                          return null;
-                        },
-                        controller: _password_1,
-                      ),
-                      const SizedBox(height: 10),
-                      ObsTextFormField(
-                        hintText: "Password",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a Password';
-                          }
-                          if (_password_1.text != _confirmPass.text) {
-                            return 'Password do not match';
-                          }
-                          return null;
-                        },
-                        controller: _confirmPass,
-                      ),
-                    ],
+                          iconName: "building",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter the ward number';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        MyTextFormField(
+                          controller: _mobNo,
+                          hintText: "Mobile no",
+                          obscureText: false,
+                          iconName: "phone",
+                          validator: _validatePhoneNum,
+                        ),
+                        const SizedBox(height: 10),
+                        ObsTextFormField(
+                          hintText: "Password",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a Password';
+                            }
+                            return null;
+                          },
+                          controller: _password_1,
+                        ),
+                        const SizedBox(height: 10),
+                        ObsTextFormField(
+                          hintText: "Password",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a Password';
+                            }
+                            if (_password_1.text != _confirmPass.text) {
+                              return 'Password do not match';
+                            }
+                            return null;
+                          },
+                          controller: _confirmPass,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                MyNewButton(
-                    onTap: () {
-                      _submitRegisterForm(context);
-                    },
-                    text: "Register"),
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an account?"),
-                    const SizedBox(width: 1),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'auth');
+                  const SizedBox(height: 20),
+                  MyNewButton(
+                      onTap: () {
+                        _submitRegisterForm(context);
                       },
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          // color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                      text: "Register"),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an account?"),
+                      const SizedBox(width: 1),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'auth');
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            // color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
