@@ -1,7 +1,7 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/admin_control_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/remove_user.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/Remove_User/remove_user.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/addnewcontact_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/more_page.dart';

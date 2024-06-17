@@ -36,12 +36,12 @@ class AdminControls extends StatelessWidget {
                   },
                   text: "Superuser Creation"),
               const SizedBox(height: 10),
-              MyNewButton(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'removeuser');
-                  },
-                  text: "User Removal"),
-              const SizedBox(height: 10),
+              // MyNewButton(
+              //     onTap: () {
+              //       Navigator.pushNamed(context, 'removeuser');
+              //     },
+              //     text: "User Removal"),
+              // const SizedBox(height: 10),
             ],
           ),
         ),
