@@ -95,7 +95,10 @@ class RegistrationPage extends StatelessWidget {
                   child: Text("NO"),
                 ),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
                   child: Text("YES"),
                 ),
               ],
@@ -115,7 +118,7 @@ class RegistrationPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 10),
                   const Text(
                     "Let's Get Started!",
                     style: TextStyle(

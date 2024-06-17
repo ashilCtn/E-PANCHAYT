@@ -38,10 +38,11 @@ class ServicePage extends StatelessWidget {
                   height: 30,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
                     controller: searchTwo,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       hintText: "Search",
                       prefixIcon: IconButton(
                           onPressed: searchFun, icon: const Icon(Icons.search)),

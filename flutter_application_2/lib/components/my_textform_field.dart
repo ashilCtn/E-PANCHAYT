@@ -43,6 +43,7 @@ class MyTextFormField extends StatelessWidget {
         controller: controller,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 15),
           // enabledBorder: const OutlineInputBorder(
           // borderSide: BorderSide(color: Colors.white),
           // ),
