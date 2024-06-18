@@ -2,17 +2,18 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/admin_control_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/Remove_User/remove_user.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/google_reg.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/addnewcontact_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/more_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/profile_update.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/profile_update.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/settings_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/superuser_page.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/contacts_page.dart';
 import 'package:flutter_application_2/app_pages/navbar_page.dart';
 import 'package:flutter_application_2/app_pages/login_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/profile_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/profile_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/signout_page.dart';
 import 'package:flutter_application_2/app_pages/regist_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         'adminlvl': (context) => const AdminControls(),
         'superuser': (context) => SuperUserPage(),
         'removeuser': (context) => const UserRemoval(),
+        'googlereg': (context) => GoogleReg(),
       },
       home: const AuthPage(),
     );

@@ -16,10 +16,10 @@ class _ProfilePageState extends State<ProfilePage> {
   FireStoreRegister fireStoreRegister = FireStoreRegister();
   FireStoreServiceProfile fireStoreServiceProfile = FireStoreServiceProfile();
   final user = FirebaseAuth.instance.currentUser!;
-  String userName = '';
-  String emailid = '';
-  String mobileNo = '';
-  String wardNo = '';
+  String userName = '   !!';
+  String emailid = '    !!';
+  String mobileNo = '   !!';
+  String wardNo = '   !!';
   List<FamilyMember> familyMembers = [];
 
   void getUserData() async {
@@ -72,6 +72,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         title: const Text('Profile'),
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'googlereg');
+              },
+              icon: const Icon(
+                  CupertinoIcons.person_crop_circle_fill_badge_exclam)),
+          const SizedBox(
+            width: 1,
+          ),
           IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, 'profileupdate');

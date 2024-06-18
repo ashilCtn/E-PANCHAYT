@@ -14,6 +14,18 @@ class FireStoreRegister {
     });
   }
 
+  Future addGoogleUserDetails(
+      String userName, String email, String wardno, String mobileno,
+      {String role = 'user'}) async {
+    await FirebaseFirestore.instance.collection('Normal_Users').add({
+      'Username': userName,
+      'Email': email,
+      'Role': role,
+      'Wardno': wardno,
+      'Mobileno': mobileno,
+    });
+  }
+
   Future<List<Map<String, dynamic>>> getAllNormalUsers() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('Normal_Users').get();
