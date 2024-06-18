@@ -9,6 +9,7 @@ class AppTheme {
         ),
         borderRadius: BorderRadius.circular(10),
       );
+
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     appBarTheme: const AppBarTheme(
@@ -26,6 +27,24 @@ class AppTheme {
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
       errorBorder: _border(AppPallete.errorColor),
+    ),
+  );
+
+  static final lightThemeMode = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: AppPallete.lightBackgroundColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppPallete.lightBarAppNav,
+    ),
+    chipTheme: const ChipThemeData(
+      backgroundColor: AppPallete.lightGreyColor,
+      side: BorderSide.none,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: const EdgeInsets.all(27),
+      border: _border(),
+      enabledBorder: _border(),
+      focusedBorder: _border(AppPallete.lightGradient2),
+      errorBorder: _border(AppPallete.lightErrorColor),
     ),
   );
 }

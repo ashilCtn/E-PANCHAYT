@@ -19,9 +19,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/updates_page.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/addnewupdate_page.dart';
 // import 'package:flutter_application_2/core/theme/splash.dart';
-// import 'package:flutter_application_2/core/theme/network/connectivity_services.dart.txt';
-import 'package:flutter_application_2/core/theme/theme.dart';
-// import 'package:provider/provider.dart';
+import 'package:flutter_application_2/core/theme/theme_notifier.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -34,7 +33,12 @@ void main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.appAttest,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,12 +46,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return ChangeNotifierProvider(
-    //   create: (context) => ConnectivityService(),
-    // child:
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkThemeMode,
+      theme: themeNotifier.currentTheme,
       routes: {
         'y': (context) => const LoginPage(),
         'x': (context) => RegistrationPage(),
@@ -67,9 +70,7 @@ class MyApp extends StatelessWidget {
         'superuser': (context) => SuperUserPage(),
         'removeuser': (context) => const UserRemoval(),
       },
-      // home: const SplashScreen(),
       home: const AuthPage(),
-      // ),
     );
   }
 }

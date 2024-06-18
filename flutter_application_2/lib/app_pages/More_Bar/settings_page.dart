@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/core/theme/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -8,13 +10,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _isDarkModeEnabled = false;
   String _selectedLanguage = 'English'; // Default language
 
   final List<String> _languages = ['English', 'Malayalam']; // List of languages
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -29,12 +32,9 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             trailing: Switch(
-              value: _isDarkModeEnabled,
+              value: themeNotifier.isDarkMode,
               onChanged: (value) {
-                setState(() {
-                  _isDarkModeEnabled = value;
-                  // Implement dark mode functionality here
-                });
+                themeNotifier.toggleTheme();
               },
             ),
           ),
