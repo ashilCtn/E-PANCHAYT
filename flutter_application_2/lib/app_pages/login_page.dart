@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_2/app_pages/forgot_password.dart';
+import 'package:flutter_application_2/auth/google_signin.dart';
 import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
@@ -112,31 +113,31 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         final value = await showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Are you sure?"),
-                      content: const Text("Do you want to exit from the app?"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: Text("NO"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: Text("YES"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-                if (value != null) {
-                  return Future.value(value);
-                } else {
-                  return Future.value(false);
-                }
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Are you sure?"),
+              content: const Text("Do you want to exit from the app?"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text("NO"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text("YES"),
+                ),
+              ],
+            );
+          },
+        );
+        if (value != null) {
+          return Future.value(value);
+        } else {
+          return Future.value(false);
+        }
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -218,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SquareTile(
-                        onTap: googleSignIn,
+                        onTap: () => GoogleSignInService().signInWithGoogle(),
                         imagePath: 'lib/img/google.png',
                       ),
                     ],
