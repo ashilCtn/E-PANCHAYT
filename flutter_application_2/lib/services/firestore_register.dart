@@ -34,6 +34,19 @@ class FireStoreRegister {
     return usersData;
   }
 
+  Future<List<String>> getAllUserEmails() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection('Normal_Users').get();
+      List<String> emails =
+          snapshot.docs.map((doc) => doc.data()['Email'] as String).toList();
+      return emails;
+    } catch (e) {
+      print('Error fetching Google user emails: $e');
+      return [];
+    }
+  }
+
   Future<UserData?> getCurrentUserData(String userEmail) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance

@@ -83,7 +83,7 @@ class _GoogleRegState extends State<GoogleReg> {
               children: [
                 const SizedBox(height: 10),
                 const Text(
-                  "Google Login",
+                  "One Time for Google user",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _GoogleRegState extends State<GoogleReg> {
                 const SizedBox(height: 0.5),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Text("User Personal Details"),
+                  child: Text("Carefully fill the below details"),
                 ),
                 const SizedBox(height: 10),
                 Form(

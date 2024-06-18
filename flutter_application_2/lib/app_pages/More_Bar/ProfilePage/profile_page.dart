@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/prof_abstract.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
 import 'package:flutter_application_2/services/profile_firestore.dart';
 
@@ -12,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  ProfileAbstraction profileAbstraction = ProfileAbstraction();
   /////////////////////////////////////////////////////////////////////////////
   FireStoreRegister fireStoreRegister = FireStoreRegister();
   FireStoreServiceProfile fireStoreServiceProfile = FireStoreServiceProfile();
@@ -72,23 +74,35 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         title: const Text('Profile'),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'googlereg');
-              },
-              icon: const Icon(
-                  CupertinoIcons.person_crop_circle_fill_badge_exclam)),
-          const SizedBox(
-            width: 1,
+          FutureBuilder<bool>(
+            future: profileAbstraction.checkProfile(),
+            builder: (context, snapshot) {
+              print(snapshot);
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox.shrink(); // Or show a loading indicator
+              } else if (snapshot.hasError) {
+                return const SizedBox.shrink(); // Optionally handle error case
+              } else if (snapshot.hasData && snapshot.data == true) {
+                return IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'googlereg');
+                  },
+                  icon: const Icon(
+                      CupertinoIcons.person_crop_circle_fill_badge_exclam),
+                );
+              } else {
+                return const SizedBox.shrink(); // If profile check fails
+              }
+            },
           ),
+          const SizedBox(width: 1),
           IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'profileupdate');
-              },
-              icon: const Icon(CupertinoIcons.create)),
-          const SizedBox(
-            width: 10,
+            onPressed: () {
+              Navigator.pushNamed(context, 'profileupdate');
+            },
+            icon: const Icon(CupertinoIcons.create),
           ),
+          const SizedBox(width: 10),
         ],
       ),
       body: Padding(
