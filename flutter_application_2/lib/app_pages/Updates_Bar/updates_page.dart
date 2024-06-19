@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/showupdate_popup.dart';
 import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
 import 'package:flutter_application_2/services/firestore.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
 
@@ -52,13 +53,21 @@ class _UpdatesPageState extends State<UpdatesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'News & Events',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: AppPallete.barAppNav,
+        backgroundColor:
+            isDarkMode ? AppPallete.barAppNav : AppPallete.lightBarAppNav,
         automaticallyImplyLeading: false,
         actions: [
           if (role == 'admin' ||
@@ -101,11 +110,11 @@ class _UpdatesPageState extends State<UpdatesPage> {
                     margin: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16.0),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [
-                        AppPallete.gradient3,
-                        AppPallete.gradient2,
-                        AppPallete.gradient1
-                      ]),
+                      gradient: isDarkMode
+                          ? AppTheme
+                              .darkThemeGradient // Use dark theme gradient
+                          : AppTheme
+                              .lightThemeGradient, // Use light theme gradient
                       borderRadius: BorderRadius.circular(16.0),
                       boxShadow: [
                         BoxShadow(
@@ -137,9 +146,17 @@ class _UpdatesPageState extends State<UpdatesPage> {
                       ),
                       title: Text(
                         updateTextHeading,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.white, // Text color
+                          color: isDarkMode
+                              ? AppTheme.darkThemeMode.textTheme.headlineMedium
+                                      ?.color ??
+                                  Colors
+                                      .black // Replace with your default color
+                              : AppTheme.lightThemeMode.textTheme.headlineMedium
+                                      ?.color ??
+                                  Colors
+                                      .black, // Replace with your default color
                         ),
                       ),
                       subtitle: Text(
@@ -147,9 +164,9 @@ class _UpdatesPageState extends State<UpdatesPage> {
                         maxLines: 3, // Limiting to 3 lines
                         overflow: TextOverflow
                             .ellipsis, // Displaying ellipsis (...) if overflow
-                        style: const TextStyle(
-                          color: Colors.white, // Text color
-                        ),
+                        style: isDarkMode
+                            ? AppTheme.darkThemeMode.textTheme.bodySmall
+                            : AppTheme.lightThemeMode.textTheme.bodySmall,
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
