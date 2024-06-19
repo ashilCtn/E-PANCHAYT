@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
 import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
-import 'package:flutter_application_2/services/firestore_register.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
+import 'package:flutter_application_2/services/firestore_register.dart'; // Make sure to import your AppTheme
 
 class MoreMainPage extends StatefulWidget {
   const MoreMainPage({super.key, Key? key2});
@@ -12,11 +13,10 @@ class MoreMainPage extends StatefulWidget {
 }
 
 class _MoreMainPageState extends State<MoreMainPage> {
-  /////////////////////////////////////////////////////////////////////
-  //Role Retrieved
   String role = '';
   FireStoreRegister fireStoreRegister = FireStoreRegister();
   final user = FirebaseAuth.instance.currentUser!;
+
   @override
   void initState() {
     super.initState();
@@ -29,14 +29,15 @@ class _MoreMainPageState extends State<MoreMainPage> {
     if (mounted) {
       setState(() {
         role = retrievedRole;
-        print('#%#%%#%#%#%${role}erere');
       });
     }
   }
 
-/////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -47,81 +48,82 @@ class _MoreMainPageState extends State<MoreMainPage> {
           },
         ),
         centerTitle: true,
-        // backgroundColor: const Color.fromARGB(188, 0, 0, 0),
       ),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(16),
-          // color: Colors.white, // Background color of the container
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              Card(
-                child: ListTile(
-                  title: const Text('Profile'),
-                  onTap: () {
-                    // Add your action here when Profile is tapped
-                    // print('Profile tapped');
-                    Navigator.pushNamed(context, 'profile');
-                  },
-                ),
+              Image.asset(
+                isDarkMode
+                    ? 'lib/img/white_logo.png'
+                    : 'lib/img/black_logo.png',
+                height: 150,
+                width: 150,
               ),
+              const SizedBox(height: 10),
+              const Divider(
+                color: AppPallete.lightGreyColor,
+              ),
+              _buildCard(context, 'person_pin', 'Profile', 'profile'),
+              const SizedBox(height: 10),
               if (role == 'admin')
-                Card(
-                  child: ListTile(
-                    title: const Text('Admin Controls'),
-                    onTap: () {
-                      // Add your action here when Contacts is tapped
-                      // print('Contacts tapped');
-                      Navigator.pushNamed(context, 'adminlvl');
-                    },
-                  ),
-                ),
-              Card(
-                child: ListTile(
-                  title: const Text('Contacts'),
-                  onTap: () {
-                    // Add your action here when Contacts is tapped
-                    // print('Contacts tapped');
-                    Navigator.pushNamed(context, 'contact');
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text('Settings'),
-                  onTap: () {
-                    // Add your action here when Sign Out is tapped
-                    Navigator.pushNamed(context, 'settings');
-                  },
-                ),
-              ),
-              // Card(
-              //   child: ListTile(
-              //     title: const Text('Sign Out'),
-              //     onTap: () {
-              //       // Add your action here when Sign Out is tapped
-              //       Navigator.pushNamed(context, 'signout');
-              //     },
-              //   ),
-              // ),
-              Card(
-                child: ListTile(
-                  title: const Text('About'),
-                  onTap: () {
-                    // Add your action here when About is tapped
-                    // print('About tapped');
-                    // Navigator.pushNamed(context, 'about');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AboutPage()));
-                  },
-                ),
-              ),
+                _buildCard(context, 'admin_panel_settings', 'Admin Controls',
+                    'adminlvl'),
+              if (role == 'admin') const SizedBox(height: 10),
+              _buildCard(context, 'contacts_rounded', 'Contacts', 'contact'),
+              const SizedBox(height: 10),
+              _buildCard(context, 'settings', 'Settings', 'settings'),
+              const SizedBox(height: 10),
+              _buildCard(context, 'question_mark_rounded', 'About', 'about'),
+              const SizedBox(height: 10),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Function to get IconData based on iconName
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'person_pin':
+        return Icons.person_pin;
+      case 'admin_panel_settings':
+        return Icons.admin_panel_settings;
+      case 'contacts_rounded':
+        return Icons.contacts_rounded;
+      case 'settings':
+        return Icons.settings;
+      case 'question_mark_rounded':
+        return Icons.question_mark_rounded;
+      default:
+        return Icons.error;
+    }
+  }
+
+  Widget _buildCard(BuildContext context, String iconName, String displayText,
+      String nextPage) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    IconData iconData = _getIconData(iconName);
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(20),
+        gradient: isDarkMode
+            ? AppTheme.darkThemeGradient
+            : AppTheme.lightThemeGradient,
+      ),
+      child: ListTile(
+        leading: Icon(iconData),
+        title: Text(displayText),
+        onTap: () {
+          Navigator.pushNamed(context, nextPage);
+        },
       ),
     );
   }
