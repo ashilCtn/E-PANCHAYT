@@ -77,7 +77,8 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
                     number.text,
                     imageURL);
               }
-              Navigator.pushNamed(context, 'contact');
+              Navigator.pop(context);
+              // Navigator.pushNamed(context, 'contact');
               name.clear();
               designation.clear();
               number.clear();

@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireStoreService {
-  //get collections of notes
-  final CollectionReference nodes =
+  //get collections of updates
+  final CollectionReference updates =
       FirebaseFirestore.instance.collection('Updates_List');
 
   //CREATE : add a new update
-  Future<void> createNode(String node, String node2, String imageURL) {
-    return nodes.add({
+  Future<void> createNode(
+      String userEmail, String node, String node2, String imageURL) {
+    String docId = '${userEmail}_${Timestamp.now().millisecondsSinceEpoch}';
+    return updates.doc(docId).set({
+      'UserEmail': userEmail,
       'News Update Heading': node,
       'News Update Details': node2,
       'ImageURL': imageURL,
@@ -15,17 +18,17 @@ class FireStoreService {
     });
   }
 
-  //READ : read an update from DB
+  //READ : read updates from DB
   Stream<QuerySnapshot> readNode() {
     final updatesStream =
-        nodes.orderBy('Date & Time', descending: true).snapshots();
+        updates.orderBy('Date & Time', descending: true).snapshots();
     return updatesStream;
   }
 
-  //UPDATE :update the content
+  //UPDATE : update the content
   Future<void> updateNewNode(
       String docID, String newNode, String newNode2, String imageURL) {
-    return nodes.doc(docID).update({
+    return updates.doc(docID).update({
       'News Update Heading': newNode,
       'News Update Details': newNode2,
       'ImageURL': imageURL,
@@ -35,7 +38,6 @@ class FireStoreService {
 
   //DELETE : delete the update
   Future<void> deleteNode(String docID) {
-    return nodes.doc(docID).delete();
+    return updates.doc(docID).delete();
   }
-  //READ : current user data
 }

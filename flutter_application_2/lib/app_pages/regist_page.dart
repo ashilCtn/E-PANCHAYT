@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
@@ -39,14 +40,28 @@ class RegistrationPage extends StatelessWidget {
   // }
 
   Future registerFunc(BuildContext context) async {
-    Loader.showLoadingDialog(context);
     // Just create a new user and password
     if (passwordConfirmed()) {
       try {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: SpinKitSpinningLines(
+              color: AppPallete.whiteColor,
+              size: 80,
+            ),
+          ),
+        );
+
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailId.text.trim(), password: _password_1.text.trim());
 
-        Navigator.pushNamed(context, 'z');
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailId.text.trim(),
+          password: _password_1.text.trim(),
+        );
+        // Navigator.pushNamed(context, 'z');
 
         // Add user details
         fireStoreRegister.addNormalUserDetails(
@@ -55,6 +70,9 @@ class RegistrationPage extends StatelessWidget {
             _wardNo.text.trim(),
             _mobNo.text.trim(),
             _password_1.text.trim());
+
+        // Pop the loading dialog and navigate to the FunPage
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } catch (e) {
         // print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${e.code}");
         Navigator.of(context).pop();
@@ -232,7 +250,8 @@ class RegistrationPage extends StatelessWidget {
                       const SizedBox(width: 1),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, 'auth');
+                          // Navigator.pushNamed(context, 'auth');
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           "Login",

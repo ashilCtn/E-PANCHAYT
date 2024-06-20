@@ -49,6 +49,8 @@ class _SuperUserPageState extends State<SuperUserPage> {
         // Navigator.of(context).pop();
       }
     }
+    await FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
   }
 
   void _submitRegisterForm(BuildContext context) {

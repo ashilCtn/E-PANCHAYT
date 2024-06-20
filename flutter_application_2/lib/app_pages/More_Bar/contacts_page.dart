@@ -55,7 +55,8 @@ class _ContactsPageState extends State<ContactsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'more');
+            Navigator.pop(context);
+            // Navigator.pushNamed(context, 'more');
           },
         ),
         title: const Text(

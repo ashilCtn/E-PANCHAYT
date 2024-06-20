@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_2/app_pages/forgot_password.dart';
 import 'package:flutter_application_2/auth/google_signin.dart';
-import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/square_tile.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,17 +24,25 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _submitForm() async {
     if (formKey.currentState!.validate()) {
       try {
-        Loader.showLoadingDialog(context); // Show loading dialog
+        // Show loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: SpinKitSpinningLines(
+              color: AppPallete.whiteColor,
+              size: 80,
+            ),
+          ),
+        );
 
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(),
           password: password.text.trim(),
         );
 
-        if (mounted) {
-          Navigator.of(context).pop(); // Close loading dialog
-          Navigator.pushReplacementNamed(context, 'updatesPage');
-        }
+        // Pop the loading dialog and navigate to the FunPage
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } on FirebaseAuthException catch (e) {
         String errorMessage =
             "Please Check Your Internet Connection and Try Again...";
@@ -44,9 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           errorMessage = "Too-Many-Requests\nTry Again Later...";
         }
 
-        if (mounted) {
-          Navigator.of(context).pop(); // Close loading dialog if error occurs
-        }
+        Navigator.of(context).pop(); // Close loading dialog
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -74,10 +80,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } catch (e) {
-        if (mounted) {
-          Navigator.of(context)
-              .pop(); // Close loading dialog if general error occurs
-        }
+        Navigator.of(context).pop(); // Close loading dialog
       }
     }
   }

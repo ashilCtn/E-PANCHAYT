@@ -17,15 +17,15 @@ Future<File?> getImageFromGallery(BuildContext context) async {
       return null;
     }
   } catch (e) {
-    String exceptionAsString = e.toString();
-    print(exceptionAsString);
+    // String exceptionAsString = e.toString();
+    // print(exceptionAsString);
     return null;
   }
 }
 
 Future<String> uploadFileForUser(File file) async {
   try {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userId = FirebaseAuth.instance.currentUser?.email;
     if (userId == null) {
       throw Exception('User not authenticated');
     }
@@ -33,7 +33,7 @@ Future<String> uploadFileForUser(File file) async {
     final fileName = file.path.split("/").last;
     final timestamp = DateTime.now().microsecondsSinceEpoch;
     final uploadRef =
-        storageRef.child("  $userId/uploads/$timestamp-$fileName");
+        storageRef.child("Updates_Page/$userId/uploads/$timestamp-$fileName");
     await uploadRef.putFile(file);
     return await uploadRef.getDownloadURL();
   } catch (e) {
@@ -45,7 +45,7 @@ Future<String> uploadFileForUser(File file) async {
 
 Future<String> uploadProfilePicOfContact(File file) async {
   try {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userId = FirebaseAuth.instance.currentUser?.email;
     if (userId == null) {
       throw Exception('User not authenticated');
     }
@@ -53,7 +53,7 @@ Future<String> uploadProfilePicOfContact(File file) async {
     final fileName = file.path.split("/").last;
     final timestamp = DateTime.now().microsecondsSinceEpoch;
     final uploadRef =
-        storageRef.child("Profile Pics/$userId/uploads/$timestamp-$fileName");
+        storageRef.child("Contact_Page/$userId/uploads/$timestamp-$fileName");
     await uploadRef.putFile(file);
     return await uploadRef.getDownloadURL();
   } catch (e) {

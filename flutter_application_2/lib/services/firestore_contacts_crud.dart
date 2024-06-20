@@ -1,30 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreServiceContacts {
-  //get collections of notes
+  // Get collections of notes
   final CollectionReference contactNodes =
       FirebaseFirestore.instance.collection('Contact_List');
 
-  //CREATE : add a new update
+  // Get the current user's email
+  String? getCurrentUserEmail() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.email;
+  }
+
+  // Generate a unique document ID using email and timestamp
+  String generateUniqueDocID(String email) {
+    return '${email}_${DateTime.now().millisecondsSinceEpoch}';
+  }
+
+  // CREATE: Add a new contact
   Future<void> createNewContact(
-      String node, String node2, String node3, String imageURL) {
-    return contactNodes.add({
-      'Contact Name': node,
-      'Contact Designation': node2,
-      'Contact Number': node3,
-      'Profile Pic': imageURL,
-      'Date & Time': Timestamp.now(),
-    });
+      String node, String node2, String node3, String imageURL) async {
+    String? email = getCurrentUserEmail();
+    if (email != null) {
+      String uniqueDocID = generateUniqueDocID(email);
+      return contactNodes.doc(uniqueDocID).set({
+        'Contact Name': node,
+        'Contact Designation': node2,
+        'Contact Number': node3,
+        'Profile Pic': imageURL,
+        'Date & Time': Timestamp.now(),
+      });
+    } else {
+      throw Exception('No logged in user');
+    }
   }
 
-  //READ : read an update from DB
+  // READ: Read all contacts
   Stream<QuerySnapshot> readAllContacts() {
-    final updatesStream =
-        contactNodes.orderBy('Contact Name', descending: false).snapshots();
-    return updatesStream;
+    return contactNodes.orderBy('Contact Name', descending: false).snapshots();
   }
 
-  //UPDATE :update the content
+  // UPDATE: Update the contact
   Future<void> updateNewContact(String docID, String newNode, String newNode2,
       String newNode3, String imageURL) {
     return contactNodes.doc(docID).update({
@@ -36,7 +52,7 @@ class FireStoreServiceContacts {
     });
   }
 
-  //DELETE : delete the update
+  // DELETE: Delete the contact
   Future<void> deleteContact(String docID) {
     return contactNodes.doc(docID).delete();
   }

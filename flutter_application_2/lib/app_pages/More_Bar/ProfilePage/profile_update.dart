@@ -109,7 +109,9 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
               // Loader.showLoadingDialog(context);
               saveToFirebase();
               // Navigator.of(context).pop();
-              Navigator.pushNamed(context, 'profile');
+              Navigator.pop(context);
+              // Navigator.pop(context);
+              // Navigator.pushNamed(context, 'profile');
             },
             icon: const Icon(Icons.done_all_rounded),
           ),

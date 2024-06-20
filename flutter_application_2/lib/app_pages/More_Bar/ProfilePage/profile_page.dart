@@ -69,7 +69,8 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'more');
+            // Navigator.pushNamed(context, 'more');
+            Navigator.pop(context);
           },
         ),
         title: const Text('Profile'),

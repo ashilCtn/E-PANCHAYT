@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
@@ -16,6 +17,7 @@ class AddNewUpdatePage extends StatefulWidget {
 }
 
 class _AddNewUpdatePageState extends State<AddNewUpdatePage> {
+  String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
   final FireStoreService fireStoreService = FireStoreService();
   // final UpdatesPage updatesPage = const UpdatesPage();
   final titleController = TextEditingController();
@@ -64,8 +66,8 @@ class _AddNewUpdatePageState extends State<AddNewUpdatePage> {
             onPressed: () {
               if (widget.docID == null) {
                 // Access docID from widget
-                fireStoreService.createNode(
-                    titleController.text, contentController.text, imageURL);
+                fireStoreService.createNode(userEmail, titleController.text,
+                    contentController.text, imageURL);
               } else {
                 fireStoreService.updateNewNode(
                     widget.docID!, // Access docID from widget
