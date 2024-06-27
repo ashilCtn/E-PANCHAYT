@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/loading.dart';
+import 'package:flutter_application_2/auth/auth_page.dart';
+// import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class SignOutPage extends StatefulWidget {
@@ -15,16 +16,11 @@ class _SignOutPageState extends State<SignOutPage> {
 
   void signUserOut() async {
     try {
-      Loader.showLoadingDialog(context);
       await FirebaseAuth.instance.signOut();
-      if (mounted) {
-        Navigator.of(context).pop();
-        Navigator.of(context).pushReplacementNamed('/');
-      }
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: ((context) => const AuthPage())));
     } on FirebaseAuthException catch (e) {
-      // An error occurred while signing out.
       print("Error signing out: $e");
-      // You can handle the error here, for example, showing an error message to the user.
     }
   }
 
@@ -38,7 +34,8 @@ class _SignOutPageState extends State<SignOutPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'more');
+            // Navigator.pushNamed(context, 'more');
+            Navigator.pop(context);
           },
         ),
         backgroundColor: AppPallete.barAppNav,

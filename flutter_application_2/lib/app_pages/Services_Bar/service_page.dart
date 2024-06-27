@@ -33,41 +33,50 @@ class ServicePage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: searchTwo,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                      hintText: "Search",
-                      prefixIcon: IconButton(
-                          onPressed: searchFun, icon: const Icon(Icons.search)),
-                    ),
-                    obscureText: false,
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: TextField(
+                controller: searchTwo,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  hintText: "Search",
+                  prefixIcon: IconButton(
+                    onPressed: searchFun,
+                    icon: const Icon(Icons.search),
                   ),
                 ),
-                const SizedBox(height: 10),
-                MyButton(onTap: landTaxCheck, text: "Land Tax Check"),
-                const SizedBox(height: 10),
-                MyButton(onTap: getComplaints, text: "Complaints"),
-                const SizedBox(height: 10),
-                MyButton(onTap: getDevInfo, text: "Development Works"),
-                const SizedBox(height: 10),
-                MyButton(onTap: getNerbyServ, text: "Nearby Services"),
-                const SizedBox(height: 10),
-                MyButton(onTap: getCertificates, text: "Certificates"),
-                const SizedBox(height: 10),
-                MyButton(onTap: getJobInfo, text: "Jobs"),
-              ],
+                obscureText: false,
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [
+                    // MyButton(onTap: landTaxCheck, text: "Land Tax Check"),
+                    // const SizedBox(height: 10),
+                    MyButton(
+                        onTap: () {
+                          Navigator.pushNamed(context, 'cplt_reg');
+                        },
+                        text: "Suggestions / Complaints"),
+                    const SizedBox(height: 10),
+                    // MyButton(onTap: getDevInfo, text: "Development Works"),
+                    // const SizedBox(height: 10),
+                    // MyButton(onTap: getNerbyServ, text: "Nearby Services"),
+                    // const SizedBox(height: 10),
+                    // MyButton(onTap: getCertificates, text: "Certificates"),
+                    // const SizedBox(height: 10),
+                    // MyButton(onTap: getJobInfo, text: "Jobs"),
+                  ]),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

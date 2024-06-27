@@ -27,7 +27,7 @@ class _ObsTextFormFieldState extends State<ObsTextFormField> {
         controller: widget.controller,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+          // contentPadding: const EdgeInsets.symmetric(vertical: 15),
           //   enabledBorder: const OutlineInputBorder(
           //     borderSide: BorderSide(color: Colors.white),
           //   ),

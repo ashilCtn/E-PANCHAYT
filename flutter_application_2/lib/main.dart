@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/admin_control_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/Remove_User/remove_user.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/google_reg.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/about_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/addnewcontact_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/About_Page/about_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/addnewcontact_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/more_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/profile_update.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/settings_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Settings/settings_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/superuser_page.dart';
+import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/cpt_reg_page.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/contacts_page.dart';
-import 'package:flutter_application_2/app_pages/navbar_page.dart';
-import 'package:flutter_application_2/app_pages/login_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/contacts_page.dart';
+import 'package:flutter_application_2/app_pages/MainScreen/navbar_page.dart';
+import 'package:flutter_application_2/app_pages/Login_Page/login_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/profile_page.dart';
-import 'package:flutter_application_2/app_pages/More_Bar/signout_page.dart';
-import 'package:flutter_application_2/app_pages/regist_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Settings/SignOut/signout_page.dart';
+import 'package:flutter_application_2/app_pages/Register_Page/regist_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/updates_page.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/addnewupdate_page.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         'superuser': (context) => SuperUserPage(),
         'removeuser': (context) => const UserRemoval(),
         'googlereg': (context) => GoogleReg(),
+        'cplt_reg': (context) => const ComplaintRegistration(),
       },
       home: const AuthPage(),
     );

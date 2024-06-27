@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_application_2/app_pages/forgot_password.dart';
+import 'package:flutter_application_2/app_pages/Login_Page/forgot_password.dart';
 import 'package:flutter_application_2/auth/google_signin.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController password = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  Future<void> _submitForm() async {
+  Future submitForm() async {
     if (formKey.currentState!.validate()) {
       try {
         // Show loading dialog
@@ -41,8 +41,12 @@ class _LoginPageState extends State<LoginPage> {
           password: password.text.trim(),
         );
 
+        Navigator.of(context).pop();
+        // if (mounted) {
+        //   Navigator.pop(context);
+        // }
         // Pop the loading dialog and navigate to the FunPage
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigator.of(context).popUntil((route) => route.isFirst);
       } on FirebaseAuthException catch (e) {
         String errorMessage =
             "Please Check Your Internet Connection and Try Again...";
@@ -51,8 +55,6 @@ class _LoginPageState extends State<LoginPage> {
         } else if (e.code == 'too-many-requests') {
           errorMessage = "Too-Many-Requests\nTry Again Later...";
         }
-
-        Navigator.of(context).pop(); // Close loading dialog
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -198,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  MyNewButton(onTap: _submitForm, text: "Login"),
+                  MyNewButton(onTap: submitForm, text: "Login"),
                   const SizedBox(height: 10),
                   Row(
                     children: [

@@ -198,51 +198,54 @@ class _UpdatesPageState extends State<UpdatesPage> {
                               ? AppTheme.darkThemeMode.textTheme.bodySmall
                               : AppTheme.lightThemeMode.textTheme.bodySmall,
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (role == 'admin' || role == 'superuser')
-                              PopupMenuButton(
-                                icon: const Icon(
-                                  Icons.more_vert,
-                                  // color: Colors.white, // Icon color
-                                ),
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry>[
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                      leading: const Icon(
-                                        Icons.edit,
-                                        // color: Colors.black, // Icon color
+                        trailing: role == 'admin'
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (role == 'admin' || role == 'superuser')
+                                    PopupMenuButton(
+                                      icon: const Icon(
+                                        Icons.more_vert,
+                                        // color: Colors.white, // Icon color
                                       ),
-                                      title: const Text('Edit'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.pushNamed(
-                                            context, 'addNewUpdate');
-                                      },
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            leading: const Icon(
+                                              Icons.edit,
+                                              // color: Colors.black, // Icon color
+                                            ),
+                                            title: const Text('Edit'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushNamed(
+                                                  context, 'addNewUpdate');
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            leading: const Icon(
+                                              Icons.delete,
+                                              // color: Colors.black, // Icon color
+                                            ),
+                                            title: const Text('Delete'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              fireStoreService
+                                                  .deleteNode(docID);
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                      leading: const Icon(
-                                        Icons.delete,
-                                        // color: Colors.black, // Icon color
-                                      ),
-                                      title: const Text('Delete'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        fireStoreService.deleteNode(docID);
-                                      },
-                                    ),
-                                  ),
+                                  const SizedBox(
+                                      width:
+                                          8), // Add spacing between the PopupMenuButton and the image box
                                 ],
-                              ),
-                            const SizedBox(
-                                width:
-                                    8), // Add spacing between the PopupMenuButton and the image box
-                          ],
-                        ),
+                              )
+                            : null,
                       ),
                     ),
                   );

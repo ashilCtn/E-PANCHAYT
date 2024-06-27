@@ -20,7 +20,7 @@ class AppTheme {
       side: BorderSide.none,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      contentPadding: const EdgeInsets.all(27),
+      contentPadding: const EdgeInsets.all(18),
       border: _border(),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
@@ -65,7 +65,7 @@ class AppTheme {
       side: BorderSide.none,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      contentPadding: const EdgeInsets.all(27),
+      contentPadding: const EdgeInsets.all(18),
       border: _border(),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.lightGradient2),
