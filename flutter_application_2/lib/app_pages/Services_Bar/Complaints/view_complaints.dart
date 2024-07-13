@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/firebase_service.dart';
 import 'package:flutter_application_2/components/my_button.dart';
+import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/core/theme/theme.dart';
 
 class CreateORViewComplaints extends StatefulWidget {
@@ -22,6 +23,8 @@ Future<void> getPublicComplaints() async {
 class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
   RealTimeFirebase realTimeFirebase = RealTimeFirebase();
   final String cType = 'Public';
+  Map<String, bool> hasIncrementedMap =
+      {}; // Persistent state for each complaint
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,7 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
             indent: 8,
             endIndent: 8,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           const Card(
             child: ListTile(
               title: Text(
@@ -66,7 +69,7 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           const Divider(
             height: 1,
             thickness: 0.5,
@@ -104,8 +107,11 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
             itemBuilder: (context, index) {
               final complaint = complaints.entries.elementAt(index);
               final complaintData = complaint.value;
+              final complaintKey = complaint.key;
+              final hasIncremented = hasIncrementedMap[complaintKey] ?? false;
+              print(complaintData);
+
               return Container(
-                // color: isDarkMode ? Colors.grey[800] : Colors.white,
                 margin:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 decoration: BoxDecoration(
@@ -122,19 +128,128 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
                     ),
                   ],
                 ),
-                child: ListTile(
-                  title: Text(
-                    complaintData['title'] ?? 'No Title',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isDarkMode ? Colors.white : Colors.black,
-                    ),
-                  ),
-                  subtitle: Text(
-                    complaintData['description'] ?? 'No Description',
-                    style: TextStyle(
-                      color: isDarkMode ? Colors.white70 : Colors.black87,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          complaintData['subject'] ?? 'No Title',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      const Divider(
+                        height: 2,
+                        thickness: 0.5,
+                        indent: 8,
+                        endIndent: 8,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                complaintData['Image_URL'] ??
+                                    'https://via.placeholder.com/150',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  complaintData['Complaint_Explained'] ??
+                                      'No Description',
+                                  maxLines: 6,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (!hasIncremented) {
+                              int temp = int.tryParse(
+                                      complaintData['support'] ?? '0') ??
+                                  0;
+                              temp++;
+                              complaintData['support'] = temp.toString();
+                              realTimeFirebase.updateSupportCount(
+                                complaintId: complaintKey,
+                                newSupportCount: temp.toString(),
+                              );
+                            } else {
+                              int temp = int.tryParse(
+                                      complaintData['support'] ?? '0') ??
+                                  0;
+                              temp--;
+                              complaintData['support'] = temp.toString();
+                              realTimeFirebase.updateSupportCount(
+                                complaintId: complaintKey,
+                                newSupportCount: temp.toString(),
+                              );
+                            }
+                            hasIncrementedMap[complaintKey] = !hasIncremented;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 2, horizontal: 11),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  shape: BoxShape.rectangle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: isDarkMode
+                                          ? AppPallete.lightOverlay
+                                          : AppPallete.overlay,
+                                    ),
+                                  ],
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 13.0, vertical: 5),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      complaintData['support'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.thumb_up_alt_outlined),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      'Support',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

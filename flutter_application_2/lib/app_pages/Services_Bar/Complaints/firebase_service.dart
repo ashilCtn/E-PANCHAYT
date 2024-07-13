@@ -11,7 +11,8 @@ class RealTimeFirebase {
       required String subject,
       required String cType,
       required String detailedComplaint,
-      required String imageURL}) async {
+      required String imageURL,
+      required String supportLike}) async {
     // Prepare data
     Map<String, String> complaintData = {
       'Username': userName,
@@ -20,7 +21,8 @@ class RealTimeFirebase {
       'Type': cType,
       'subject': subject,
       'Complaint_Explained': detailedComplaint,
-      'Image_URL': imageURL
+      'Image_URL': imageURL,
+      'support': supportLike,
     };
 
     try {
@@ -58,5 +60,21 @@ class RealTimeFirebase {
       print('Error reading complaints: $error');
     }
     return result;
+  }
+
+  Future<void> updateSupportCount({
+    required String complaintId,
+    required String newSupportCount,
+  }) async {
+    try {
+      await _databaseReference
+          .ref('Complaints_List')
+          .child(complaintId)
+          .update({'support': newSupportCount});
+      print('Support count updated successfully!');
+    } catch (e) {
+      print('Error updating support count: $e');
+      // Handle error as needed
+    }
   }
 }

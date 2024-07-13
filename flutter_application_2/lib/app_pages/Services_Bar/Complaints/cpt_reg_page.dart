@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/complaint_id.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/firebase_service.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/predef_text.dart';
 import 'package:flutter_application_2/components/loading.dart';
@@ -22,7 +23,7 @@ class ComplaintRegistration extends StatefulWidget {
 class _ComplaintRegistrationState extends State<ComplaintRegistration> {
   final subject = TextEditingController();
   final detailedContent = TextEditingController();
-  String complaintID = 'user4';
+  String complaintID = '';
   String userName = '';
   String emailID = '';
   String contactNo = '';
@@ -52,15 +53,16 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
     }
   }
 
-  void generateComplaintID() {
-    // Implement your logic to generate complaint ID here
+  void generateComplaintID() async {
+    ComplaintMGR complaintMGR = ComplaintMGR();
+    complaintID = await complaintMGR.incrementAndUpdateComplaintID();
   }
 
   @override
   void initState() {
     getUserData();
+    generateComplaintID();
     super.initState();
-    // generateComplaintID();
   }
 
   File? image;
@@ -102,7 +104,8 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
                   subject: subject.text,
                   cType: selectedType,
                   detailedComplaint: detailedContent.text,
-                  imageURL: imageURL);
+                  imageURL: imageURL,
+                  supportLike: '0');
               realTimeFirebase.realTimeRead(cType: 'Public');
               Navigator.pop(context);
               subject.clear();
