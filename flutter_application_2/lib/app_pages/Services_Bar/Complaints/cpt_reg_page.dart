@@ -2,9 +2,12 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/firebase_service.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/predef_text.dart';
+import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/services/firebase_storage_functions.dart';
 
 import '../../../services/firestore_register.dart';
 
@@ -17,14 +20,20 @@ class ComplaintRegistration extends StatefulWidget {
 }
 
 class _ComplaintRegistrationState extends State<ComplaintRegistration> {
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
-  String complaintID = 'Generating...';
+  final subject = TextEditingController();
+  final detailedContent = TextEditingController();
+  String complaintID = 'user4';
   String userName = '';
   String emailID = '';
   String contactNo = '';
+  String imageURL =
+      'https://e7.pngegg.com/pngimages/829/733/png-clipart-logo-brand-product-trademark-font-not-found-logo-brand.png';
+
+  String selectedType = 'Private';
+  final List<String> categories = ['Private', 'Public'];
 
   FireStoreRegister fireStoreRegister = FireStoreRegister();
+  RealTimeFirebase realTimeFirebase = RealTimeFirebase();
   final user = FirebaseAuth.instance.currentUser!;
 
   void getUserData() async {
@@ -56,8 +65,20 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
 
   File? image;
 
-  void selectImage() {
-    // Implement image selection logic here
+  void selectImage() async {
+    Loader.showLoadingDialog(context);
+    final selectedImage = await getImageFromGallery(context);
+    if (selectedImage != null) {
+      setState(() {
+        image = selectedImage;
+      });
+      imageURL = await uploadFileForUser(selectedImage);
+    } else {
+      print("Image Not Selected\n");
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -72,10 +93,20 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              realTimeFirebase.realTimeCreate(
+                  complaintID: complaintID,
+                  userName: userName,
+                  emailID: emailID,
+                  contact: contactNo,
+                  subject: subject.text,
+                  cType: selectedType,
+                  detailedComplaint: detailedContent.text,
+                  imageURL: imageURL);
+              realTimeFirebase.realTimeRead(cType: 'Public');
               Navigator.pop(context);
-              titleController.clear();
-              contentController.clear();
+              subject.clear();
+              detailedContent.clear();
             },
             icon: const Icon(Icons.done_all_rounded),
           ),
@@ -149,13 +180,36 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
                 dataValue: contactNo,
               ),
               const SizedBox(height: 10),
+              //Create a drop down list here
+              ListTile(
+                title: PreDefText(
+                  label: 'Type of Issue',
+                  dataValue: '',
+                ),
+                trailing: DropdownButton<String>(
+                  value: selectedType,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedType = newValue!;
+                    });
+                  },
+                  items:
+                      categories.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 10),
               UpdatePageTextField(
-                controller: titleController,
+                controller: subject,
                 hintText: 'Subject',
               ),
               const SizedBox(height: 10),
               UpdatePageTextField(
-                controller: contentController,
+                controller: detailedContent,
                 hintText: 'Detailed Complaint/Suggestion',
               ),
             ],

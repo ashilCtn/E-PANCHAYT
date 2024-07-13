@@ -28,17 +28,6 @@ class RegistrationPage extends StatelessWidget {
     //tip!! >> add a pop up for showing the pass and confirm pass donot match
   }
 
-  // Future addNormalUserDetails(String userName, String email, int wardno,
-  //     int mobileno, String password) async {
-  //   await FirebaseFirestore.instance.collection('Normal_Users').add({
-  //     'Username': userName,
-  //     'Email': email,
-  //     'Wardno': wardno,
-  //     'Mobileno': mobileno,
-  //     'Password': password,
-  //   });
-  // }
-
   Future registerFunc(BuildContext context) async {
     // Just create a new user and password
     if (passwordConfirmed()) {

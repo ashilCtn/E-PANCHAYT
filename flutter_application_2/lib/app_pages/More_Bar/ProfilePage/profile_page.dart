@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
           FutureBuilder<bool>(
             future: profileAbstraction.checkProfile(),
             builder: (context, snapshot) {
-              print(snapshot);
+              // print(snapshot);
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox.shrink(); // Or show a loading indicator
               } else if (snapshot.hasError) {

@@ -10,6 +10,7 @@ import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/profile_upd
 import 'package:flutter_application_2/app_pages/More_Bar/Settings/settings_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Admin_Control/superuser_page.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/cpt_reg_page.dart';
+import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/view_complaints.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/contacts_page.dart';
 import 'package:flutter_application_2/app_pages/MainScreen/navbar_page.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
         'removeuser': (context) => const UserRemoval(),
         'googlereg': (context) => GoogleReg(),
         'cplt_reg': (context) => const ComplaintRegistration(),
+        'view_cplt': (context) => const CreateORViewComplaints(),
       },
       home: const AuthPage(),
     );

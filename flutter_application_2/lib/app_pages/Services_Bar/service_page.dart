@@ -60,8 +60,13 @@ class ServicePage extends StatelessWidget {
                     // MyButton(onTap: landTaxCheck, text: "Land Tax Check"),
                     // const SizedBox(height: 10),
                     MyButton(
-                        onTap: () {
-                          Navigator.pushNamed(context, 'cplt_reg');
+                        onTap: () async {
+                          Navigator.pushNamed(context, 'view_cplt');
+                          // CcClassification ccClassification =
+                          //     CcClassification();
+                          // List<String> res = await ccClassification.readTypes();
+                          // // Use 'res' as needed
+                          // print(res);
                         },
                         text: "Suggestions / Complaints"),
                     const SizedBox(height: 10),

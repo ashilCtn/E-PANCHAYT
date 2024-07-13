@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/cc_classification.dart';
+import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/predef_text.dart';
 import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
@@ -11,19 +13,49 @@ import 'package:flutter_application_2/services/firestore_contacts_crud.dart';
 
 class AddNewContactPage extends StatefulWidget {
   final String? docID; // Declare docID as a parameter
-  const AddNewContactPage({super.key, this.docID});
+  const AddNewContactPage({Key? key, this.docID}) : super(key: key);
 
   @override
   State<AddNewContactPage> createState() => _AddNewContactPageState();
 }
 
 class _AddNewContactPageState extends State<AddNewContactPage> {
+  CcClassification ccClassification = CcClassification();
+
+  String selectedType = 'All';
+  List<String> categories = ['All'];
+
   final FireStoreServiceContacts fireStoreService = FireStoreServiceContacts();
   final name = TextEditingController();
   final designation = TextEditingController();
   final number = TextEditingController();
-  String imageURL = '';
+  String imageURL =
+      'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg';
   File? image;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize categories asynchronously
+    Future.delayed(Duration.zero, () async {
+      categories = await ccClassification.readTypes();
+      setState(() {}); // Update the state to reflect the loaded categories
+      if (widget.docID != null) {
+        fetchContactDetails(widget.docID!);
+      }
+    });
+  }
+
+  void fetchContactDetails(String docID) async {
+    // Fetch existing contact details using docID and populate fields
+    final contact = await fireStoreService.getContactDetails(docID);
+    setState(() {
+      name.text = contact.name;
+      designation.text = contact.designation;
+      number.text = contact.number;
+      imageURL = contact.imageURL;
+    });
+  }
 
   @override
   void dispose() {
@@ -39,10 +71,7 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
       setState(() {
         image = selectedImage;
       });
-      // print("Image Not @@@@@@@@@@@@@@@@@@@@@@@@@@@@@Selected\n");
       imageURL = await uploadProfilePicOfContact(selectedImage);
-      // print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${imageURL}");
-      // print(imageURL);
     } else {
       print("Image Not Selected\n");
     }
@@ -58,27 +87,28 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'contact');
+            Navigator.pop(context);
           },
         ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {
+              print(widget.docID);
               if (widget.docID == null) {
                 // Access docID from widget
-                fireStoreService.createNewContact(
-                    name.text, designation.text, number.text, imageURL);
+                fireStoreService.createNewContact(name.text, designation.text,
+                    number.text, imageURL, selectedType);
               } else {
                 fireStoreService.updateNewContact(
                     widget.docID!, // Access docID from widget
                     name.text,
                     designation.text,
                     number.text,
-                    imageURL);
+                    imageURL,
+                    selectedType);
               }
               Navigator.pop(context);
-              // Navigator.pushNamed(context, 'contact');
               name.clear();
               designation.clear();
               number.clear();
@@ -162,6 +192,28 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
                 controller: number,
                 hintText: 'Phone',
               ),
+              ListTile(
+                title: PreDefText(
+                  label: 'Contact\nType',
+                  dataValue: '',
+                ),
+                trailing: DropdownButton<String>(
+                  value: selectedType,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedType = newValue!;
+                    });
+                  },
+                  items:
+                      categories.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
