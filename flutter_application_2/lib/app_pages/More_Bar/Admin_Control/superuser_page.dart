@@ -4,7 +4,6 @@ import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/obscure_textformfield.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
 
 class SuperUserPage extends StatefulWidget {
@@ -85,7 +84,7 @@ class _SuperUserPageState extends State<SuperUserPage> {
           'Admin Controls',
         ),
         centerTitle: true,
-        backgroundColor: AppPallete.barAppNav,
+        // backgroundColor: AppPallete.barAppNav,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

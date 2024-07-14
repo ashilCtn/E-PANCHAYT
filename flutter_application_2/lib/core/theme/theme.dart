@@ -116,4 +116,14 @@ class AppTheme {
       AppPallete.lightGradient1,
     ],
   );
+
+  static final darkTheme2 = ThemeData.dark().copyWith(
+    textTheme:
+        const TextTheme(bodyLarge: TextStyle(color: AppPallete.gradient1)),
+  );
+
+  static final lightTheme2 = ThemeData.light().copyWith(
+    textTheme:
+        const TextTheme(bodyLarge: TextStyle(color: AppPallete.lightGradient1)),
+  );
 }

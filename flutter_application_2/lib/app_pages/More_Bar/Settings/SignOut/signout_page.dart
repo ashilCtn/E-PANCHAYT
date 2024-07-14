@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
 import 'package:flutter_application_2/components/my_button.dart';
 // import 'package:flutter_application_2/components/loading.dart';
-import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class SignOutPage extends StatefulWidget {
   const SignOutPage({super.key});
@@ -15,11 +14,23 @@ class SignOutPage extends StatefulWidget {
 class _SignOutPageState extends State<SignOutPage> {
   final user = FirebaseAuth.instance.currentUser!;
 
+  // void signUserOut() async {
+  //   try {
+  //     await FirebaseAuth.instance.signOut();
+  //     Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(builder: ((context) => const AuthPage())));
+  //   } on FirebaseAuthException catch (e) {
+  //     print("Error signing out: $e");
+  //   }
+  // }
   void signUserOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: ((context) => const AuthPage())));
+      if (mounted) {
+        // Check if the widget is still mounted
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: ((context) => const AuthPage())));
+      }
     } on FirebaseAuthException catch (e) {
       print("Error signing out: $e");
     }
@@ -39,7 +50,7 @@ class _SignOutPageState extends State<SignOutPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: AppPallete.barAppNav,
+        // backgroundColor: AppPallete.barAppNav,
       ),
       body: Center(
         child: Column(

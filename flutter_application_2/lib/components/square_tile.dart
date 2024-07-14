@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
 
 class SquareTile extends StatelessWidget {
   final String imagePath;
@@ -8,12 +9,20 @@ class SquareTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
+          border: Border.all(
+            color: isDarkMode
+                ? AppTheme.darkThemeMode.textTheme.bodyLarge?.color ??
+                    Colors.black // Fallback to default color if null
+                : AppTheme.lightThemeMode.textTheme.bodyLarge?.color ??
+                    Colors.black,
+          ),
           borderRadius: BorderRadius.circular(16),
           // color: Colors.grey[200],
         ),

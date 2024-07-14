@@ -28,7 +28,7 @@ class AppPallete {
   static const Color lightGreyColor = Color.fromRGBO(211, 211, 211, 1);
   static const Color lightErrorColor = Color.fromRGBO(255, 69, 58, 1);
   static const Color lightTransparentColor = Colors.transparent;
-  static const Color lightBarAppNav = Color.fromARGB(255, 15, 110, 0);
+  static const Color lightBarAppNav = Color.fromARGB(255, 15, 109, 0);
   static const Color lightNavSelect = Color.fromARGB(255, 0, 0, 0);
   static const Color lightNavUnselect = Color.fromARGB(255, 0, 0, 0);
   static const Color lightOverlay = Color.fromARGB(77, 200, 200, 200);

@@ -6,7 +6,7 @@ import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/addnewcon
 import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/cc_classification.dart';
 import 'package:flutter_application_2/components/profile_avatar.dart';
 import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
-import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
 import 'package:flutter_application_2/services/firestore_contacts_crud.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -79,6 +79,18 @@ class _ContactsPageState extends State<ContactsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    final primaryGradient = LinearGradient(
+      colors: [
+        colorScheme.primary,
+        colorScheme.secondary,
+        colorScheme.tertiary,
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: AppPallete.barAppNav,
@@ -160,11 +172,7 @@ class _ContactsPageState extends State<ContactsPage> {
                       return Container(
                         margin: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [
-                            AppPallete.gradient3,
-                            AppPallete.gradient2,
-                            AppPallete.gradient1
-                          ]),
+                          gradient: primaryGradient,
                           borderRadius: BorderRadius.circular(16.0),
                           boxShadow: [
                             BoxShadow(
@@ -182,10 +190,17 @@ class _ContactsPageState extends State<ContactsPage> {
                           ),
                           title: Text(
                             fetchCName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                              color: isDarkMode
+                                  ? AppTheme.darkThemeMode.textTheme.bodyLarge
+                                          ?.color ??
+                                      Colors
+                                          .black // Fallback to default color if null
+                                  : AppTheme.lightThemeMode.textTheme.bodyLarge
+                                          ?.color ??
+                                      Colors.black,
                             ),
                           ),
                           subtitle: Column(
@@ -195,8 +210,15 @@ class _ContactsPageState extends State<ContactsPage> {
                                   Expanded(
                                     child: Text(
                                       'Designation : $fetchCDesignation',
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                                      style: TextStyle(
+                                        color: isDarkMode
+                                            ? AppTheme.darkThemeMode.textTheme
+                                                    .bodyLarge?.color ??
+                                                Colors
+                                                    .black // Fallback to default color if null
+                                            : AppTheme.lightThemeMode.textTheme
+                                                    .bodyLarge?.color ??
+                                                Colors.black,
                                       ),
                                       maxLines: null,
                                       overflow: TextOverflow.visible,
@@ -211,8 +233,15 @@ class _ContactsPageState extends State<ContactsPage> {
                                 children: [
                                   Text(
                                     fetchCNumber,
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: isDarkMode
+                                          ? AppTheme.darkThemeMode.textTheme
+                                                  .bodyLarge?.color ??
+                                              Colors
+                                                  .black // Fallback to default color if null
+                                          : AppTheme.lightThemeMode.textTheme
+                                                  .bodyLarge?.color ??
+                                              Colors.black,
                                     ),
                                   ),
                                 ],

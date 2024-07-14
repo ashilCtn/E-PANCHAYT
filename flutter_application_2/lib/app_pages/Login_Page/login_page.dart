@@ -7,6 +7,7 @@ import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/square_tile.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -117,6 +118,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return WillPopScope(
       onWillPop: () async {
         final value = await showDialog<bool>(
@@ -191,9 +194,18 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextButton(
                           onPressed: () => forgotPass(),
-                          child: const Text(
+                          child: Text(
                             "Forgot password?",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isDarkMode
+                                  ? AppTheme.darkTheme2.textTheme.bodyLarge
+                                          ?.color ??
+                                      Colors.black
+                                  : AppTheme.lightTheme2.textTheme.bodyLarge
+                                          ?.color ??
+                                      Colors.black,
+                            ),
                           ),
                         ),
                       ],
@@ -239,10 +251,18 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.pushNamed(context, 'x');
                         },
-                        child: const Text(
+                        child: Text(
                           "Register Now! ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: isDarkMode
+                                ? AppTheme.darkTheme2.textTheme.bodyLarge
+                                        ?.color ??
+                                    Colors
+                                        .black // Fallback to default color if null
+                                : AppTheme.lightTheme2.textTheme.bodyLarge
+                                        ?.color ??
+                                    Colors.black,
                           ),
                         ),
                       ),
