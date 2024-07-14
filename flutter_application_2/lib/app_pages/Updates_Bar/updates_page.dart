@@ -24,7 +24,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
 
   final TextEditingController textController = TextEditingController();
   final TextEditingController textController2 = TextEditingController();
-  String imageURL = '';
+  String imageURL =
+      'https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg';
 
   //Role Retrieved
   String role = '';

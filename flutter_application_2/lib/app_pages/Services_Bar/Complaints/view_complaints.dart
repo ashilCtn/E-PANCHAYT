@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/firebase_service.dart';
 import 'package:flutter_application_2/components/my_button.dart';
@@ -11,20 +12,9 @@ class CreateORViewComplaints extends StatefulWidget {
   State<CreateORViewComplaints> createState() => _CreateORViewComplaintsState();
 }
 
-Map<String, Map<String, dynamic>> result = {};
-
-RealTimeFirebase realTimeFirebase = RealTimeFirebase();
-
-Future<void> getPublicComplaints() async {
-  result = await realTimeFirebase.realTimeRead(cType: 'Public');
-  print(result);
-}
-
 class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
   RealTimeFirebase realTimeFirebase = RealTimeFirebase();
-  final String cType = 'Public';
-  Map<String, bool> hasIncrementedMap =
-      {}; // Persistent state for each complaint
+  final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +78,6 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
   }
 
   Widget _listItem() {
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
-
     return StreamBuilder<Map<String, Map<String, dynamic>>>(
       stream: realTimeFirebase.realTimeRead(cType: 'Public').asStream(),
       builder: (context, snapshot) {
@@ -106,157 +93,194 @@ class _CreateORViewComplaintsState extends State<CreateORViewComplaints> {
             itemCount: complaints.length,
             itemBuilder: (context, index) {
               final complaint = complaints.entries.elementAt(index);
-              final complaintData = complaint.value;
               final complaintKey = complaint.key;
-              final hasIncremented = hasIncrementedMap[complaintKey] ?? false;
-              print(complaintData);
+              final complaintData = complaint.value;
 
-              return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                decoration: BoxDecoration(
-                  gradient: isDarkMode
-                      ? AppTheme.darkThemeGradient
-                      : AppTheme.lightThemeGradient,
-                  borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(
-                          complaintData['subject'] ?? 'No Title',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      const Divider(
-                        height: 2,
-                        thickness: 0.5,
-                        indent: 8,
-                        endIndent: 8,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                complaintData['Image_URL'] ??
-                                    'https://via.placeholder.com/150',
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Wrap(
-                              children: [
-                                Text(
-                                  complaintData['Complaint_Explained'] ??
-                                      'No Description',
-                                  maxLines: 6,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (!hasIncremented) {
-                              int temp = int.tryParse(
-                                      complaintData['support'] ?? '0') ??
-                                  0;
-                              temp++;
-                              complaintData['support'] = temp.toString();
-                              realTimeFirebase.updateSupportCount(
-                                complaintId: complaintKey,
-                                newSupportCount: temp.toString(),
-                              );
-                            } else {
-                              int temp = int.tryParse(
-                                      complaintData['support'] ?? '0') ??
-                                  0;
-                              temp--;
-                              complaintData['support'] = temp.toString();
-                              realTimeFirebase.updateSupportCount(
-                                complaintId: complaintKey,
-                                newSupportCount: temp.toString(),
-                              );
-                            }
-                            hasIncrementedMap[complaintKey] = !hasIncremented;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 2, horizontal: 11),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  shape: BoxShape.rectangle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: isDarkMode
-                                          ? AppPallete.lightOverlay
-                                          : AppPallete.overlay,
-                                    ),
-                                  ],
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 13.0, vertical: 5),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      complaintData['support'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Icon(Icons.thumb_up_alt_outlined),
-                                    const SizedBox(width: 8),
-                                    const Text(
-                                      'Support',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return ComplaintItem(
+                complaintKey: complaintKey,
+                complaintData: complaintData,
+                realTimeFirebase: realTimeFirebase,
+                emailId: userEmail ?? '', // Pass the email ID here
               );
             },
           );
         }
       },
+    );
+  }
+}
+
+class ComplaintItem extends StatefulWidget {
+  final String complaintKey;
+  final Map<String, dynamic> complaintData;
+  final RealTimeFirebase realTimeFirebase;
+  final String emailId;
+
+  const ComplaintItem({
+    required this.complaintKey,
+    required this.complaintData,
+    required this.realTimeFirebase,
+    required this.emailId,
+    super.key,
+  });
+
+  @override
+  _ComplaintItemState createState() => _ComplaintItemState();
+}
+
+class _ComplaintItemState extends State<ComplaintItem> {
+  late bool hasIncremented;
+  late List<dynamic> likes;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the likes list if it is null and make it mutable
+    likes = List.from(widget.complaintData['likes'] ?? []);
+    hasIncremented = likes.contains(widget.emailId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      decoration: BoxDecoration(
+        gradient: isDarkMode
+            ? AppTheme.darkThemeGradient
+            : AppTheme.lightThemeGradient,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                widget.complaintData['subject'] ?? 'No Title',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const Divider(
+              height: 2,
+              thickness: 0.5,
+              indent: 8,
+              endIndent: 8,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      widget.complaintData['Image_URL'] ??
+                          'https://via.placeholder.com/150',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Wrap(
+                    children: [
+                      Text(
+                        widget.complaintData['Complaint_Explained'] ??
+                            'No Description',
+                        maxLines: 6,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (!hasIncremented) {
+                    widget.complaintData['support'] =
+                        (int.parse(widget.complaintData['support']) + 1)
+                            .toString();
+                    likes.add(widget.emailId);
+                  } else {
+                    widget.complaintData['support'] =
+                        (int.parse(widget.complaintData['support']) - 1)
+                            .toString();
+                    likes.remove(widget.emailId);
+                  }
+                  widget.complaintData['likes'] = likes;
+                  widget.realTimeFirebase.updateSupportCount(
+                    complaintId: widget.complaintKey,
+                    emailId: widget.emailId,
+                    isLiked: !hasIncremented,
+                  );
+                  hasIncremented = !hasIncremented;
+                });
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 11),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        shape: BoxShape.rectangle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: isDarkMode
+                                ? AppPallete.lightOverlay
+                                : AppPallete.overlay,
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 13.0, vertical: 5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.complaintData['support'],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 8),
+                          hasIncremented
+                              ? const Icon(Icons.thumb_up_alt_rounded)
+                              : const Icon(Icons.thumb_up_alt_outlined),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Support',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

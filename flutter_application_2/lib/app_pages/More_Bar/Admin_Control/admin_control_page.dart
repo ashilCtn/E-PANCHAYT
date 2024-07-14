@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
-import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
 class AdminControls extends StatelessWidget {
   const AdminControls({super.key});
@@ -13,7 +12,7 @@ class AdminControls extends StatelessWidget {
           'Admin Controls',
         ),
         centerTitle: true,
-        backgroundColor: AppPallete.barAppNav,
+        // backgroundColor: AppPallete.barAppNav,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

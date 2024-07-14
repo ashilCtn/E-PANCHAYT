@@ -24,7 +24,8 @@ class _ContactsPageState extends State<ContactsPage> {
   final TextEditingController cName = TextEditingController();
   final TextEditingController cDesignation = TextEditingController();
   final TextEditingController cNumber = TextEditingController();
-  String imageURL = '';
+  String imageURL =
+      'https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg';
   /////////////////////////////////////////////////////////////////////
   //Role Retrieved
   String role = '';
@@ -80,7 +81,7 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppPallete.barAppNav,
+        // backgroundColor: AppPallete.barAppNav,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

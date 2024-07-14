@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-String imageURL = '';
+String imageURL =
+    'https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg';
 
 Future<File?> getImageFromGallery(BuildContext context) async {
   try {

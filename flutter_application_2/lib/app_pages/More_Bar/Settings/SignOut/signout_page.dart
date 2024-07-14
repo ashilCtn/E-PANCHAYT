@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/auth/auth_page.dart';
+import 'package:flutter_application_2/components/my_button.dart';
 // import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 
@@ -48,35 +49,11 @@ class _SignOutPageState extends State<SignOutPage> {
             const SizedBox(
               height: 10,
             ),
-            GestureDetector(
-              onTap: () {
-                signUserOut();
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60),
-                child: Container(
-                  decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [
-                        AppPallete.gradient1,
-                        AppPallete.gradient2,
-                        AppPallete.gradient3
-                      ]),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Center(
-                      child: Padding(
-                    padding: EdgeInsets.all(25),
-                    child: Text(
-                      'Sign Out',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  )),
-                ),
-              ),
-            )
+            MyButton(
+                onTap: () {
+                  signUserOut();
+                },
+                text: 'Sign Out'),
           ],
         ),
       ),

@@ -30,7 +30,7 @@ class _AddNewContactPageState extends State<AddNewContactPage> {
   final designation = TextEditingController();
   final number = TextEditingController();
   String imageURL =
-      'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg';
+      'https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg';
   File? image;
 
   @override

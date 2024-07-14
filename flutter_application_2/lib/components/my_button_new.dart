@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/core/theme/app_pallete.dart';
+import 'package:flutter_application_2/core/theme/theme.dart';
 
 class MyNewButton extends StatelessWidget {
   final Function()? onTap;
@@ -9,23 +9,39 @@ class MyNewButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    final primaryGradient = LinearGradient(
+      colors: [
+        colorScheme.primary,
+        colorScheme.secondary,
+        colorScheme.tertiary,
+      ],
+    );
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-              colors: [AppPallete.gradient1, AppPallete.gradient2]),
-          borderRadius: BorderRadius.circular(8),
+          gradient: primaryGradient,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               // color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
+              color: isDarkMode
+                  ? AppTheme.darkThemeMode.textTheme.bodyLarge?.color ??
+                      Colors.black // Fallback to default color if null
+                  : AppTheme.lightThemeMode.textTheme.bodyLarge?.color ??
+                      Colors.black, // Fallback to default color if null
             ),
           ),
         ),

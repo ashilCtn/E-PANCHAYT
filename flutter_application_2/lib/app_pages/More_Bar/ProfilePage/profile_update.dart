@@ -98,7 +98,8 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'profile');
+            // Navigator.pushNamed(context, 'profile');
+            Navigator.pop(context);
           },
         ),
         title: const Text('Update Profile'),

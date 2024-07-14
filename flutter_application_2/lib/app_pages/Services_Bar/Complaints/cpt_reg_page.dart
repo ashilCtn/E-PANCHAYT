@@ -28,7 +28,7 @@ class _ComplaintRegistrationState extends State<ComplaintRegistration> {
   String emailID = '';
   String contactNo = '';
   String imageURL =
-      'https://e7.pngegg.com/pngimages/829/733/png-clipart-logo-brand-product-trademark-font-not-found-logo-brand.png';
+      'https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg';
 
   String selectedType = 'Private';
   final List<String> categories = ['Private', 'Public'];
