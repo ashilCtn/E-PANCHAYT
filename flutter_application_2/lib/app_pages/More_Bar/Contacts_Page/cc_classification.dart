@@ -10,7 +10,7 @@ class CcClassification {
       List<String> contactTypes = snapshot.docs
           .map((doc) => doc.data()['Contact_Type'] as String)
           .toList();
-
+      contactTypes.sort();
       print('Contact Types: $contactTypes');
       return contactTypes;
     } catch (e) {

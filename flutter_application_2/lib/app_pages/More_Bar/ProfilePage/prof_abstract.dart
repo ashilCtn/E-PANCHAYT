@@ -24,7 +24,7 @@ class ProfileAbstraction {
           return false; // User email is already in Firestore
         }
       } catch (e) {
-        print('Error fetching user emails: $e');
+        // print('Error fetching user emails: $e');
         return false; // Error occurred, return false
       }
     } else {

@@ -3,13 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/addnewcontact_page.dart';
+import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/cached_profile_avatar.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/Contacts_Page/cc_classification.dart';
-import 'package:flutter_application_2/components/profile_avatar.dart';
 import 'package:flutter_application_2/core/RBAC/role_retrieve.dart';
 import 'package:flutter_application_2/core/theme/theme.dart';
 import 'package:flutter_application_2/services/firestore_contacts_crud.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
@@ -57,7 +59,7 @@ class _ContactsPageState extends State<ContactsPage> {
     if (mounted) {
       setState(() {
         role = retrievedRole;
-        print('#%#%%#%#%#%${role}');
+        // print('#%#%%#%#%#%${role}');
       });
     }
   }
@@ -66,10 +68,6 @@ class _ContactsPageState extends State<ContactsPage> {
     if (selectedType == 'All') {
       return fireStoreServiceContacts.readAllContacts();
     } else {
-      print(FirebaseFirestore.instance
-          .collection('Contact_List')
-          .where('Contact Type', isEqualTo: selectedType)
-          .snapshots());
       return FirebaseFirestore.instance
           .collection('Contact_List')
           .where('Contact Type', isEqualTo: selectedType)
@@ -91,9 +89,11 @@ class _ContactsPageState extends State<ContactsPage> {
       ],
     );
 
+    // double itemHeight = 56.25;
+    // double maxHeight = categories.length * itemHeight;
+
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: AppPallete.barAppNav,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -101,9 +101,10 @@ class _ContactsPageState extends State<ContactsPage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-          'Contacts',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          'Contacts'.tr,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          maxLines: 2,
         ),
         centerTitle: true,
         actions: [
@@ -125,22 +126,30 @@ class _ContactsPageState extends State<ContactsPage> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                DropdownButtonFormField<String>(
-                  value: selectedType, // Selected value
-                  items: categories.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        selectedType = newValue;
-                      });
-                      print('Selected: $newValue');
-                    }
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: .0),
+                  child: DropdownSearch<String>(
+                    popupProps: const PopupProps.menu(
+                      constraints: BoxConstraints(maxHeight: 225),
+                      showSelectedItems: true,
+                      // disabledItemFn: (String s) => s.startsWith('I'),
+                    ),
+                    items: categories,
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: "Contact Type",
+                      ),
+                    ),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          selectedType = newValue;
+                        });
+                        // print('Selected: $newValue');
+                      }
+                    },
+                    selectedItem: selectedType,
+                  ),
                 ),
               ],
             ),
@@ -170,7 +179,8 @@ class _ContactsPageState extends State<ContactsPage> {
                       String imageURL = data['Profile Pic'];
 
                       return Container(
-                        margin: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
                         decoration: BoxDecoration(
                           gradient: primaryGradient,
                           borderRadius: BorderRadius.circular(16.0),
@@ -183,9 +193,10 @@ class _ContactsPageState extends State<ContactsPage> {
                             ),
                           ],
                         ),
+
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(0),
-                          leading: ProfileAvatar(
+                          leading: CachedProfileAvatar(
                             imageUrl: imageURL,
                           ),
                           title: Text(
@@ -196,8 +207,7 @@ class _ContactsPageState extends State<ContactsPage> {
                               color: isDarkMode
                                   ? AppTheme.darkThemeMode.textTheme.bodyLarge
                                           ?.color ??
-                                      Colors
-                                          .black // Fallback to default color if null
+                                      Colors.black
                                   : AppTheme.lightThemeMode.textTheme.bodyLarge
                                           ?.color ??
                                       Colors.black,
@@ -209,7 +219,7 @@ class _ContactsPageState extends State<ContactsPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Designation : $fetchCDesignation',
+                                      '${'Designation'.tr} : $fetchCDesignation',
                                       style: TextStyle(
                                         color: isDarkMode
                                             ? AppTheme.darkThemeMode.textTheme
@@ -262,7 +272,7 @@ class _ContactsPageState extends State<ContactsPage> {
                                       leading: const Icon(
                                         Icons.chat,
                                       ),
-                                      title: const Text('Message'),
+                                      title: Text('Message'.tr),
                                       onTap: () {
                                         Navigator.pop(context);
                                         final Uri url = Uri.parse(
@@ -276,7 +286,7 @@ class _ContactsPageState extends State<ContactsPage> {
                                       leading: const Icon(
                                         Icons.call,
                                       ),
-                                      title: const Text('Call'),
+                                      title: Text('Call'.tr),
                                       onTap: () {
                                         Navigator.pop(context);
                                         final Uri url =
@@ -291,7 +301,7 @@ class _ContactsPageState extends State<ContactsPage> {
                                         leading: const Icon(
                                           Icons.edit,
                                         ),
-                                        title: const Text('Edit'),
+                                        title: Text('Edit'.tr),
                                         onTap: () {
                                           Navigator.pop(context);
                                           Navigator.push(
@@ -311,7 +321,7 @@ class _ContactsPageState extends State<ContactsPage> {
                                         leading: const Icon(
                                           CupertinoIcons.person_badge_minus,
                                         ),
-                                        title: const Text('Remove'),
+                                        title: Text('Remove'.tr),
                                         onTap: () {
                                           Navigator.pop(context);
                                           fireStoreServiceContacts
@@ -325,12 +335,13 @@ class _ContactsPageState extends State<ContactsPage> {
                             ],
                           ),
                         ),
+                        // ),
                       );
                     },
                   );
                 } else {
-                  return const Center(
-                    child: Text('No Added Contacts!!!'),
+                  return Center(
+                    child: Text('No Added Contacts!!!'.tr),
                   );
                 }
               },

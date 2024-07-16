@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/Services_Bar/Complaints/firebase_service.dart';
 import 'package:flutter_application_2/components/my_button.dart';
+import 'package:flutter_application_2/components/showupdate_popup.dart';
 import 'package:flutter_application_2/core/theme/app_pallete.dart';
 import 'package:flutter_application_2/core/theme/theme.dart';
 
@@ -181,36 +184,49 @@ class _ComplaintItemState extends State<ComplaintItem> {
               indent: 8,
               endIndent: 8,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      widget.complaintData['Image_URL'] ??
-                          'https://via.placeholder.com/150',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                showCustomDialog(
+                    context,
+                    widget.complaintData['subject'],
+                    widget.complaintData['Complaint_Explained'],
+                    widget.complaintData['Image_URL']);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.complaintData['Image_URL'] ??
+                            "https://via.placeholder.com/150",
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Wrap(
-                    children: [
-                      Text(
-                        widget.complaintData['Complaint_Explained'] ??
-                            'No Description',
-                        maxLines: 6,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Wrap(
+                      children: [
+                        Text(
+                          widget.complaintData['Complaint_Explained'] ??
+                              'No Description',
+                          maxLines: 6,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             GestureDetector(
               onTap: () {

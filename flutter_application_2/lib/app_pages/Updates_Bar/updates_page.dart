@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,8 +102,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
               isDarkMode ? AppPallete.barAppNav : AppPallete.lightBarAppNav,
           automaticallyImplyLeading: false,
           actions: [
-            if (role == 'admin' ||
-                role == 'superuser') // Conditional check for role
+            if (role == 'admin' || role == 'superuser')
               IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, 'addNewUpdate');
@@ -133,7 +133,6 @@ class _UpdatesPageState extends State<UpdatesPage> {
 
                   return GestureDetector(
                     onTap: () {
-                      // POP UP of the list
                       showCustomDialog(context, updateTextHeading,
                           updateTextDetails, imageURL);
                     },
@@ -142,10 +141,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                           vertical: 8.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         gradient: isDarkMode
-                            ? AppTheme
-                                .darkThemeGradient // Use dark theme gradient
-                            : AppTheme
-                                .lightThemeGradient, // Use light theme gradient
+                            ? AppTheme.darkThemeGradient
+                            : AppTheme.lightThemeGradient,
                         borderRadius: BorderRadius.circular(16.0),
                         boxShadow: [
                           BoxShadow(
@@ -156,97 +153,108 @@ class _UpdatesPageState extends State<UpdatesPage> {
                           ),
                         ],
                       ),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              10), // Adjust the radius as needed
-                          child: Container(
-                            width: 100, // Adjust the width as needed
-                            height: 100, // Adjust the height as needed
-                            color: Colors.grey, // Placeholder color
-                            child: imageURL.isNotEmpty
-                                ? Image.network(
-                                    imageURL,
-                                    fit: BoxFit.fill,
-                                  )
-                                : const Icon(
-                                    Icons.add_photo_alternate,
-                                    // color: Colors.white,
-                                  ),
-                          ),
-                        ),
-                        title: Text(
-                          updateTextHeading,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? AppTheme.darkThemeMode.textTheme
-                                        .headlineMedium?.color ??
-                                    Colors
-                                        .black // Replace with your default color
-                                : AppTheme.lightThemeMode.textTheme
-                                        .headlineMedium?.color ??
-                                    Colors
-                                        .black, // Replace with your default color
-                          ),
-                        ),
-                        subtitle: Text(
-                          updateTextDetails,
-                          maxLines: 3, // Limiting to 3 lines
-                          overflow: TextOverflow
-                              .ellipsis, // Displaying ellipsis (...) if overflow
-                          style: isDarkMode
-                              ? AppTheme.darkThemeMode.textTheme.bodySmall
-                              : AppTheme.lightThemeMode.textTheme.bodySmall,
-                        ),
-                        trailing: role == 'admin'
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (role == 'admin' || role == 'superuser')
-                                    PopupMenuButton(
-                                      icon: const Icon(
-                                        Icons.more_vert,
-                                        // color: Colors.white, // Icon color
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(
+                                      updateTextHeading,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: isDarkMode
+                                            ? AppTheme.darkThemeMode.textTheme
+                                                    .headlineMedium?.color ??
+                                                Colors.black
+                                            : AppTheme.lightThemeMode.textTheme
+                                                    .headlineMedium?.color ??
+                                                Colors.black,
                                       ),
-                                      itemBuilder: (BuildContext context) =>
-                                          <PopupMenuEntry>[
-                                        PopupMenuItem(
-                                          child: ListTile(
-                                            leading: const Icon(
-                                              Icons.edit,
-                                              // color: Colors.black, // Icon color
-                                            ),
-                                            title: const Text('Edit'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              Navigator.pushNamed(
-                                                  context, 'addNewUpdate');
-                                            },
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          child: ListTile(
-                                            leading: const Icon(
-                                              Icons.delete,
-                                              // color: Colors.black, // Icon color
-                                            ),
-                                            title: const Text('Delete'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              fireStoreService
-                                                  .deleteNode(docID);
-                                            },
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                  const SizedBox(
-                                      width:
-                                          8), // Add spacing between the PopupMenuButton and the image box
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: imageURL,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                const Center(
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          updateTextDetails,
+                                          maxLines: 6,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
-                              )
-                            : null,
+                              ),
+                            ),
+                            if (role == 'admin' || role == 'superuser')
+                              PopupMenuButton(
+                                icon: const Icon(
+                                  Icons.more_vert,
+                                ),
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry>[
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: const Icon(
+                                        Icons.edit,
+                                      ),
+                                      title: const Text('Edit'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        fireStoreService.deleteNode(docID);
+                                        Navigator.pushNamed(
+                                            context, 'addNewUpdate');
+                                      },
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: const Icon(
+                                        Icons.delete,
+                                      ),
+                                      title: const Text('Delete'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        fireStoreService.deleteNode(docID);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
                       ),
                     ),
                   );

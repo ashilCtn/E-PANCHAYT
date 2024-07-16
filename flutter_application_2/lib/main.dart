@@ -21,8 +21,10 @@ import 'package:flutter_application_2/app_pages/Register_Page/regist_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/updates_page.dart';
 import 'package:flutter_application_2/app_pages/Updates_Bar/addnewupdate_page.dart';
+import 'package:flutter_application_2/core/Language/locale_string.dart';
 // import 'package:flutter_application_2/core/theme/splash.dart';
 import 'package:flutter_application_2/core/theme/theme_notifier.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -51,7 +53,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
-    return MaterialApp(
+    return GetMaterialApp(
+      //////////////
+      translations: LocalString(),
+      locale: const Locale('en', 'US'),
+      //////////////
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.currentTheme,
       routes: {
@@ -72,7 +78,7 @@ class MyApp extends StatelessWidget {
         'adminlvl': (context) => const AdminControls(),
         'superuser': (context) => SuperUserPage(),
         'removeuser': (context) => const UserRemoval(),
-        'googlereg': (context) => GoogleReg(),
+        'googlereg': (context) => const GoogleReg(),
         'cplt_reg': (context) => const ComplaintRegistration(),
         'view_cplt': (context) => const CreateORViewComplaints(),
       },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_application_2/components/loading.dart';
 import 'package:flutter_application_2/components/update_page_textfield.dart';
 import 'package:flutter_application_2/services/profile_firestore.dart';
+import 'package:get/get.dart';
 
 class ProfileUpdatePage extends StatefulWidget {
   const ProfileUpdatePage({super.key});
@@ -58,7 +59,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
             children: [
               Center(
                 child: Text(
-                  'Family Member ${i + 1}',
+                  '${'Family Member'.tr} ${i + 1}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -66,19 +67,19 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
               ListTile(
                 title: UpdatePageTextField(
                   controller: nameController,
-                  hintText: 'Name',
+                  hintText: 'Name'.tr,
                 ),
               ),
               ListTile(
                 title: UpdatePageTextField(
                   controller: relationController,
-                  hintText: 'Relation with User',
+                  hintText: 'Relation with User'.tr,
                 ),
               ),
               ListTile(
                 title: UpdatePageTextField(
                   controller: aadhaarController,
-                  hintText: 'Aadhaar',
+                  hintText: 'Aadhaar'.tr,
                 ),
               ),
             ],
@@ -102,7 +103,10 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Update Profile'),
+        title: Text(
+          'Update Profile'.tr,
+          maxLines: 2,
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -127,9 +131,10 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
           child: Column(
             children: [
               ListTile(
-                title: const Text(
-                  'Family Count',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                title: Text(
+                  'Family Count'.tr,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 trailing: DropdownButton<String>(
                   value: _selectedNumber,

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/my_button_new.dart';
 import 'package:flutter_application_2/components/my_textform_field.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
+import 'package:get/get.dart';
 
 class GoogleReg extends StatefulWidget {
-  GoogleReg({Key? key}) : super(key: key);
+  const GoogleReg({super.key});
 
   @override
   State<GoogleReg> createState() => _GoogleRegState();
@@ -42,10 +43,10 @@ class _GoogleRegState extends State<GoogleReg> {
 
   String? validatePhoneNum(value) {
     if (value.isEmpty) {
-      return 'Please enter your phone number';
+      return 'Please enter your phone number'.tr;
     }
     if (value.length != 10) {
-      return 'Please enter a 10-digit phone number';
+      return 'Please enter a 10-digit phone number'.tr;
     }
     return null;
   }
@@ -56,7 +57,7 @@ class _GoogleRegState extends State<GoogleReg> {
         // Navigate to 'z' screen
         Navigator.pop(context);
         Navigator.pushNamed(context, 'z');
-        print("&&&&&&&&&&&&&&&&&&&&&&&&");
+        // print("&&&&&&&&&&&&&&&&&&&&&&&&");
 
         // Add user details to Firestore
         fireStoreRegister.addGoogleUserDetails(
@@ -68,7 +69,7 @@ class _GoogleRegState extends State<GoogleReg> {
 
         // Navigate back
       } catch (e) {
-        print('Error adding user details: $e');
+        // print('Error adding user details: $e');
       }
     }
   }
@@ -82,17 +83,17 @@ class _GoogleRegState extends State<GoogleReg> {
             child: Column(
               children: [
                 const SizedBox(height: 10),
-                const Text(
-                  "One Time for Google user",
-                  style: TextStyle(
+                Text(
+                  "One Time for Google user".tr,
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 0.5),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Text("Carefully fill the below details"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Text("Carefully fill the below details".tr),
                 ),
                 const SizedBox(height: 10),
                 Form(
@@ -101,12 +102,12 @@ class _GoogleRegState extends State<GoogleReg> {
                     children: [
                       MyTextFormField(
                         controller: _userName_1,
-                        hintText: "Username",
+                        hintText: "Username".tr,
                         obscureText: false,
                         iconName: "person_alt_circle_fill",
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter a username';
+                            return 'Please enter a username'.tr;
                           }
                           return null;
                         },
@@ -114,12 +115,12 @@ class _GoogleRegState extends State<GoogleReg> {
                       const SizedBox(height: 10),
                       MyTextFormField(
                         controller: _wardNo,
-                        hintText: "Ward no",
+                        hintText: "Ward no".tr,
                         obscureText: false,
                         iconName: "building",
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the ward number';
+                            return 'Please enter the ward number'.tr;
                           }
                           return null;
                         },
@@ -127,7 +128,7 @@ class _GoogleRegState extends State<GoogleReg> {
                       const SizedBox(height: 10),
                       MyTextFormField(
                         controller: _mobNo,
-                        hintText: "Mobile no",
+                        hintText: "Mobile no".tr,
                         obscureText: false,
                         iconName: "phone",
                         validator: validatePhoneNum,
@@ -139,7 +140,7 @@ class _GoogleRegState extends State<GoogleReg> {
                 const SizedBox(height: 20),
                 MyNewButton(
                   onTap: submitGoogleRegist,
-                  text: "Add Details",
+                  text: "Add Details".tr,
                 ),
                 const SizedBox(height: 15),
               ],

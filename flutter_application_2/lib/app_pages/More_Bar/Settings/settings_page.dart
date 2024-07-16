@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/core/theme/theme_notifier.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   String _selectedLanguage = 'English'; // Default language
 
-  final List<String> _languages = ['English', 'Malayalam']; // List of languages
+  final List<String> _languages = ['English', 'മലയാളം']; // List of languages
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +22,15 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Settings'),
+        title: Text('Settings'.tr),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           ListTile(
-            title: const Text(
-              'Dark Mode',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            title: Text(
+              'Dark Mode'.tr,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             trailing: Switch(
               value: themeNotifier.isDarkMode,
@@ -40,9 +41,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(),
           ListTile(
-            title: const Text(
-              'Language',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            title: Text(
+              'Language'.tr,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             trailing: DropdownButton<String>(
               value: _selectedLanguage,
@@ -50,6 +51,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() {
                   _selectedLanguage = newValue!;
                   // Implement language change functionality here
+                  if (newValue == 'English') {
+                    var locale = const Locale('en', 'US');
+                    Get.updateLocale(locale);
+                  } else {
+                    var locale = const Locale('ml', 'IN');
+                    Get.updateLocale(locale);
+                  }
                 });
               },
               items: _languages.map<DropdownMenuItem<String>>((String value) {
@@ -63,10 +71,11 @@ class _SettingsPageState extends State<SettingsPage> {
           const Divider(),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, 'signout'),
-            child: const ListTile(
+            child: ListTile(
               title: Text(
-                'Log Out',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                'Log Out'.tr,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),

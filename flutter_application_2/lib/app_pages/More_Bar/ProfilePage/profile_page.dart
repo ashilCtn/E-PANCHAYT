@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app_pages/More_Bar/ProfilePage/prof_abstract.dart';
 import 'package:flutter_application_2/services/firestore_register.dart';
 import 'package:flutter_application_2/services/profile_firestore.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -73,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Profile'),
+        title: Text('Profile'.tr),
         actions: [
           FutureBuilder<bool>(
             future: profileAbstraction.checkProfile(),
@@ -125,22 +126,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildDetailRow(
-                          'Username:',
+                          'Username:'.tr,
                           userName,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
-                          'Email ID:',
+                          'Email ID:'.tr,
                           emailid,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
-                          'Mobile No:',
+                          'Mobile No:'.tr,
                           mobileNo,
                         ),
                         const SizedBox(height: 8),
                         _buildDetailRow(
-                          'Ward No:',
+                          'Ward No:'.tr,
                           wardNo,
                         ),
                       ],
@@ -150,12 +151,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const Divider(), // Add a divider after the card
-            const Card(
+            Card(
               child: ListTile(
                 title: Text(
-                  'Family Members',
+                  'Family Members'.tr,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -196,8 +197,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      'Relation with User: ${member.relationwithuser}'),
-                                  Text('Aadhaar No: ${member.aadhaar}'),
+                                      '${'Relation with User:'.tr} ${member.relationwithuser}'),
+                                  Text('${'Aadhaar No:'.tr} ${member.aadhaar}'),
                                 ],
                               ),
                             ),
