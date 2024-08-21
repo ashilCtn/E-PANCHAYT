@@ -89,7 +89,8 @@ class _SuperUserPageState extends State<SuperUserPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'adminlvl');
+            // Navigator.pushNamed(context, 'adminlvl');
+            Navigator.pop(context);
           },
         ),
       ),
